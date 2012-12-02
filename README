@@ -1,0 +1,7 @@
+Fulcrum
+
+A collection of utilities designed to be cross-compiled from Java to
+Objective-C using the j2objc project from https://code.google.com/p/j2objc/.
+
+Fulcrum is licensed under the Apache Software License version 2.0
+(http://www.apache.org/licenses/LICENSE-2.0).
