@@ -45,6 +45,12 @@ public class Tests extends TestSuite {
         fulcrum.math.PolygonTest.class, //
 
         //
+        // fulcrum.noise
+        //
+        fulcrum.noise.OctavesTest.class,
+        fulcrum.noise.SimplexTest.class, //
+
+        //
         // fulcrum.util
         //
         fulcrum.util.RandomTest.class //

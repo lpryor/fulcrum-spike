@@ -16,7 +16,7 @@
  * limitations under the License.
  * 
  * The code in this file is based on version 20 of the MersenneTwisterFast 
- * implementation by Sean Luke and Michael Lecuyer. available at:
+ * implementation by Sean Luke and Michael Lecuyer available at:
  * http://www.cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java
  * The following copyright notice and licensing information is reproduced 
  * from the original file:

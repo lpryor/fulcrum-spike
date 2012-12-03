@@ -1,34 +1,46 @@
 ===============================================================================
 ||  Fulcrum Notice                                                           ||
+||  https://github.com/lpryor/Fulcrum                                        ||
 ===============================================================================
 
 This project contains software from the Fulcrum project.
-https://github.com/lpryor/Fulcrum
 
 Copyright (c) 2012 Lonnie Pryor III
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 ===============================================================================
 ||  MersenneTwisterFast version 20 Notice                                    ||
 ||  http://www.cs.gmu.edu/~sean/research/mersenne/MersenneTwisterFast.java   ||
 ===============================================================================
 
-Copyright (c) 2003 by Sean Luke. <br>
-Portions copyright (c) 1993 by Michael Lecuyer. <br>
-All rights reserved. <br>
+Copyright (c) 2003 by Sean Luke.
+Portions copyright (c) 1993 by Michael Lecuyer.
+All rights reserved.
 
-<p>Redistribution and use in source and binary forms, with or without 
+Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
-<ul>
-<li> Redistributions of source code must retain the above copyright notice, 
-this list of conditions and the following disclaimer.
-<li> Redistributions in binary form must reproduce the above copyright notice, 
-this list of conditions and the following disclaimer in the documentation 
-and/or other materials provided with the distribution.
-<li> Neither the name of the copyright owners, their employers, nor the 
-names of its contributors may be used to endorse or promote products 
-derived from this software without specific prior written permission.
-</ul>
-<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+
+ - Redistributions of source code must retain the above copyright notice, 
+   this list of conditions and the following disclaimer.
+ - Redistributions in binary form must reproduce the above copyright notice, 
+   this list of conditions and the following disclaimer in the documentation 
+   and/or other materials provided with the distribution.
+ - Neither the name of the copyright owners, their employers, nor the 
+   names of its contributors may be used to endorse or promote products 
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
 DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNERS OR CONTRIBUTORS BE 
@@ -40,4 +52,17 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 POSSIBILITY OF SUCH DAMAGE.
 
+===============================================================================
+||  SimplexNoise version 2012-03-09 Notice                                   ||
+||  http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java         ||
+===============================================================================
+
+Based on example code by Stefan Gustavson (stegu@itn.liu.se).
+Optimizations by Peter Eastman (peastman@drizzle.stanford.edu).
+Better rank ordering method by Stefan Gustavson in 2012.
+
+This code was placed in the public domain by its original author,
+Stefan Gustavson. You may use it as you see fit, but attribution is
+appreciated.
+ 
 ===============================================================================
