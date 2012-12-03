@@ -42,7 +42,12 @@ public class Tests extends TestSuite {
         fulcrum.math.BoxTest.class, //
         fulcrum.math.LineTest.class, //
         fulcrum.math.TriangleTest.class, //
-        fulcrum.math.PolygonTest.class //
+        fulcrum.math.PolygonTest.class, //
+
+        //
+        // fulcrum.util
+        //
+        fulcrum.util.RandomTest.class //
 
         });
   }
