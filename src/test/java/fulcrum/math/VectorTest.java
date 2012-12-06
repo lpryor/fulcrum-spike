@@ -162,7 +162,12 @@ public class VectorTest extends TestCase {
   private void verifyScalarComparisons(Vector v, float low, float equal, float high) {
     assertTrue(!v.equalTo(low));
     assertTrue(v.equalTo(equal));
-    assertTrue(!v.equals(high));
+    assertTrue(!v.equalTo(high));
+    assertTrue(!v.equalTo(low, 0.2f));
+    assertTrue(v.equalTo(equal, 0.2f));
+    assertTrue(v.equalTo(equal + 0.1f, 0.2f));
+    assertTrue(v.equalTo(equal - 0.1f, 0.2f));
+    assertTrue(!v.equalTo(high, 0.2f));
     assertTrue(!v.lessThan(low));
     assertTrue(!v.lessThan(equal));
     assertTrue(v.lessThan(high));
@@ -181,7 +186,12 @@ public class VectorTest extends TestCase {
   private <V extends Vector> void verifyVectorComparisons(V v, V low, V equal, V high) {
     assertTrue(!v.equalTo(low));
     assertTrue(v.equalTo(equal));
-    assertTrue(!v.equals(high));
+    assertTrue(!v.equalTo(high));
+    assertTrue(!v.equalTo(low, 0.2f));
+    assertTrue(v.equalTo(equal, 0.2f));
+    assertTrue(v.equalTo(equal.add(0.1f), 0.2f));
+    assertTrue(v.equalTo(equal.subtract(0.1f), 0.2f));
+    assertTrue(!v.equalTo(high, 0.2f));
     assertTrue(!v.lessThan(low));
     assertTrue(!v.lessThan(equal));
     assertTrue(v.lessThan(high));

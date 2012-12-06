@@ -100,6 +100,26 @@ public abstract class Line implements Cloneable {
   /** Returns an iterator over the vertices of this line. */
   public abstract Iterator<? extends Vector> iterate();
 
+  /**
+   * Returns true if each vertex of this line is equal to the corresponding vertex
+   * of that line.
+   */
+  public final boolean equalTo(Line that) {
+    assert that != null;
+    return begin().equalTo(that.begin()) && end().equalTo(that.end());
+  }
+
+  /**
+   * Returns true if each vertex of this line is approximately equal to the
+   * corresponding vertex of that line, using the supplied delta to compute the
+   * approximation.
+   */
+  public final boolean equalTo(Line that, float delta) {
+    assert that != null;
+    assert delta >= 0f;
+    return begin().equalTo(that.begin(), delta) && end().equalTo(that.end(), delta);
+  }
+
   /* @see Object#hashCode() */
   @Override
   public final int hashCode() {
@@ -113,8 +133,7 @@ public abstract class Line implements Cloneable {
       return true;
     if (obj == null || !obj.getClass().equals(getClass()))
       return false;
-    Line that = (Line) obj;
-    return begin().equals(that.begin()) && end().equals(that.end());
+    return equalTo((Line) obj);
   }
 
   /* @see Object#toString() */

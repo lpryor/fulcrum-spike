@@ -80,6 +80,38 @@ public abstract class Polygon implements Cloneable {
   /** Returns an iterator over the vertices of this polygon. */
   public abstract Iterator<? extends Vector> iterate();
 
+  /**
+   * Returns true if each vertex of this polygon is equal to the corresponding
+   * vertex of that polygon.
+   */
+  public final boolean equalTo(Polygon that) {
+    assert that != null;
+    int vertices = vertices();
+    if (vertices != that.vertices())
+      return false;
+    for (int i = 0; i < vertices; ++i)
+      if (!vertex(i).equalTo(that.vertex(i)))
+        return false;
+    return true;
+  }
+
+  /**
+   * Returns true if each vertex of this polygon is approximately equal to the
+   * corresponding vertex of that polygon, using the supplied delta to compute
+   * the approximation.
+   */
+  public final boolean equalTo(Polygon that, float delta) {
+    assert that != null;
+    assert delta >= 0f;
+    int vertices = vertices();
+    if (vertices != that.vertices())
+      return false;
+    for (int i = 0; i < vertices; ++i)
+      if (!vertex(i).equalTo(that.vertex(i), delta))
+        return false;
+    return true;
+  }
+
   /* @see Object#hashCode() */
   @Override
   public final int hashCode() {
@@ -96,12 +128,7 @@ public abstract class Polygon implements Cloneable {
       return true;
     if (obj == null || !obj.getClass().equals(getClass()))
       return false;
-    Polygon that = (Polygon) obj;
-    int dimensions = dimensions();
-    for (int i = 0; i < dimensions; ++i)
-      if (!vertex(i).equals(that.vertex(i)))
-        return false;
-    return true;
+    return equalTo((Polygon) obj);
   }
 
   /* @see Object#toString() */

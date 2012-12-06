@@ -35,10 +35,10 @@ public final class Strings {
   }
 
   /** Provides support for simple message formatting. */
-  public static String format(String message, Iterable<Object> arguments) {
+  public static String format(String message, Iterable<?> arguments) {
     assert message != null;
     assert arguments != null;
-    Iterator<Object> iter = arguments.iterator();
+    Iterator<?> iter = arguments.iterator();
     int offset = 0;
     StringBuilder builder = new StringBuilder(message.length() + 32);
     for (int index = message.indexOf("%"), count = 0; index > -1; index = message.indexOf("%", offset)) {
@@ -75,11 +75,11 @@ public final class Strings {
   }
 
   /** Formats object information for display. */
-  public static String format(Class<?> type, Iterable<Object> members) {
+  public static String format(Class<?> type, Iterable<?> members) {
     String name = type.getName();
     StringBuilder builder = new StringBuilder();
     builder.append(name.substring(name.lastIndexOf('.') + 1).replace('$', '_'));
-    Iterator<Object> iter = members.iterator();
+    Iterator<?> iter = members.iterator();
     if (iter.hasNext()) {
       builder.append('(');
       while (iter.hasNext())

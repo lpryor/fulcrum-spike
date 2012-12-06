@@ -76,6 +76,37 @@ public class BoxTest extends TestCase {
   }
 
   /**
+   * Boxes provide tests for equality and approximation with other boxes.
+   */
+  public void testProvidesBoxEqualityAndApproximationOperations() {
+    verifyEqualityAndApproximation(
+        Box.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
+        Box.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
+        Box.create(Vector.create(0.1f, 0.1f), Vector.create(0.9f, 0.9f)),
+        Box.create(Vector.create(5f, 5f), Vector.create(7f, 7f)));
+    verifyEqualityAndApproximation(
+        Box.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
+        Box.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
+        Box.create(Vector.create(0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f)),
+        Box.create(Vector.create(5f, 5f, 5f), Vector.create(7f, 7f, 7f)));
+    verifyEqualityAndApproximation(
+        Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
+        Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
+        Box.create(Vector.create(0.1f, 0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f, 0.9f)),
+        Box.create(Vector.create(5f, 5f, 5f, 5f), Vector.create(7f, 7f, 7f, 7f)));
+  }
+
+  /** Verifies the box equality and approximation operations. */
+  private void verifyEqualityAndApproximation(Box a, Box same, Box close, Box different) {
+    assertTrue(a.equalTo(same));
+    assertTrue(!a.equalTo(close));
+    assertTrue(!a.equalTo(different));
+    assertTrue(a.equalTo(same, 0.2f));
+    assertTrue(a.equalTo(close, 0.2f));
+    assertTrue(!a.equalTo(different, 0.2f));
+  }
+
+  /**
    * Boxes are capable of determining if they contain a point or box as well as
    * if they intersect another box.
    */

@@ -80,6 +80,26 @@ public abstract class Box implements Cloneable {
     return true;
   }
 
+  /**
+   * Returns true if each bound of this box is equal to the corresponding bound
+   * of that box.
+   */
+  public final boolean equalTo(Box that) {
+    assert that != null;
+    return lower().equalTo(that.lower()) && upper().equalTo(that.upper());
+  }
+
+  /**
+   * Returns true if each bound of this box is approximately equal to the
+   * corresponding bound of that box, using the supplied delta to compute the
+   * approximation.
+   */
+  public final boolean equalTo(Box that, float delta) {
+    assert that != null;
+    assert delta >= 0f;
+    return lower().equalTo(that.lower(), delta) && upper().equalTo(that.upper(), delta);
+  }
+
   /* @see Object#hashCode() */
   @Override
   public final int hashCode() {
@@ -93,8 +113,7 @@ public abstract class Box implements Cloneable {
       return true;
     if (obj == null || !obj.getClass().equals(getClass()))
       return false;
-    Box that = (Box) obj;
-    return lower().equals(that.lower()) && upper().equals(that.upper());
+    return equalTo((Box) obj);
   }
 
   /* @see Object#toString() */

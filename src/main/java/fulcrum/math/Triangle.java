@@ -110,6 +110,27 @@ public abstract class Triangle implements Cloneable {
   /** Returns an iterator over the vertices of this triangle. */
   public abstract Iterator<? extends Vector> iterate();
 
+  /**
+   * Returns true if each vertex of this triangle is equal to the corresponding
+   * vertex of that triangle.
+   */
+  public final boolean equalTo(Triangle that) {
+    assert that != null;
+    return begin().equalTo(that.begin()) && middle().equalTo(that.middle()) && end().equalTo(that.end());
+  }
+
+  /**
+   * Returns true if each vertex of this triangle is approximately equal to the
+   * corresponding vertex of that triangle, using the supplied delta to compute
+   * the approximation.
+   */
+  public final boolean equalTo(Triangle that, float delta) {
+    assert that != null;
+    assert delta >= 0f;
+    return begin().equalTo(that.begin(), delta) && middle().equalTo(that.middle(), delta)
+        && end().equalTo(that.end(), delta);
+  }
+
   /* @see Object#hashCode() */
   @Override
   public final int hashCode() {
@@ -124,7 +145,7 @@ public abstract class Triangle implements Cloneable {
     if (obj == null || !obj.getClass().equals(getClass()))
       return false;
     Triangle that = (Triangle) obj;
-    return begin().equals(that.begin()) && middle().equals(that.middle()) && end().equals(that.end());
+    return equalTo(that);
   }
 
   /* @see Object#toString() */

@@ -153,6 +153,19 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
   }
 
   /**
+   * Returns true if each component of this vector is approximately equal to the
+   * specified scalar, using the supplied delta to compute the approximation.
+   */
+  public final boolean equalTo(float scalar, float delta) {
+    assert delta >= 0f;
+    int dimensions = dimensions();
+    for (int i = 0; i < dimensions; ++i)
+      if (Math.abs(value(i) - scalar) > delta)
+        return false;
+    return true;
+  }
+
+  /**
    * Returns true if each component of this vector is less than the specified
    * scalar.
    */
@@ -209,6 +222,21 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
     int dimensions = dimensions();
     for (int i = 0; i < dimensions; ++i)
       if (value(i) != that.value(i))
+        return false;
+    return true;
+  }
+
+  /**
+   * Returns true if each component of this vector is approximately equal to the
+   * corresponding component of that vector, using the supplied delta to compute
+   * the approximation.
+   */
+  public final boolean equalTo(Vector that, float delta) {
+    assert that != null;
+    assert delta >= 0f;
+    int dimensions = dimensions();
+    for (int i = 0; i < dimensions; ++i)
+      if (Math.abs(value(i) - that.value(i)) > delta)
         return false;
     return true;
   }

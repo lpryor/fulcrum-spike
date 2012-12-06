@@ -169,4 +169,35 @@ public class PolygonTest extends TestCase {
     }
   }
 
+  /**
+   * Polygons provide tests for equality and approximation with other polygons.
+   */
+  public void testProvidesPolygonEqualityAndApproximationOperations() {
+    verifyEqualityAndApproximation(
+        Polygon.create(Vector.create(0f, 0f), Vector.create(1f, 1f), Vector.create(0f, 1f)),
+        Polygon.create(Vector.create(0f, 0f), Vector.create(1f, 1f), Vector.create(0f, 1f)),
+        Polygon.create(Vector.create(0.1f, 0.1f), Vector.create(0.9f, 0.9f), Vector.create(0.1f, 0.9f)),
+        Polygon.create(Vector.create(5f, 5f), Vector.create(7f, 7f), Vector.create(5f, 7f)));
+    verifyEqualityAndApproximation(
+        Polygon.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f), Vector.create(0f, 1f, 1f)),
+        Polygon.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f), Vector.create(0f, 1f, 1f)),
+        Polygon.create(Vector.create(0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f), Vector.create(0.1f, 0.9f, 0.9f)),
+        Polygon.create(Vector.create(5f, 5f, 5f), Vector.create(7f, 7f, 7f), Vector.create(5f, 7f, 7f)));
+    verifyEqualityAndApproximation(
+        Polygon.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f), Vector.create(0f, 1f, 1f, 1f)),
+        Polygon.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f), Vector.create(0f, 1f, 1f, 1f)),
+        Polygon.create(Vector.create(0.1f, 0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f, 0.9f), Vector.create(0.1f, 0.9f, 0.9f, 0.9f)),
+        Polygon.create(Vector.create(5f, 5f, 5f, 5f), Vector.create(7f, 7f, 7f, 7f), Vector.create(5f, 7f, 7f, 7f)));
+  }
+
+  /** Verifies the polygon equality and approximation operations. */
+  private void verifyEqualityAndApproximation(Polygon a, Polygon same, Polygon close, Polygon different) {
+    assertTrue(a.equalTo(same));
+    assertTrue(!a.equalTo(close));
+    assertTrue(!a.equalTo(different));
+    assertTrue(a.equalTo(same, 0.2f));
+    assertTrue(a.equalTo(close, 0.2f));
+    assertTrue(!a.equalTo(different, 0.2f));
+  }
+
 }

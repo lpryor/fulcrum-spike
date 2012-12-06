@@ -148,4 +148,35 @@ public class LineTest extends TestCase {
     }
   }
 
+  /**
+   * Lines provide tests for equality and approximation with other lines.
+   */
+  public void testProvidesLineEqualityAndApproximationOperations() {
+    verifyEqualityAndApproximation(
+        Line.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
+        Line.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
+        Line.create(Vector.create(0.1f, 0.1f), Vector.create(0.9f, 0.9f)),
+        Line.create(Vector.create(5f, 5f), Vector.create(7f, 7f)));
+    verifyEqualityAndApproximation(
+        Line.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
+        Line.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
+        Line.create(Vector.create(0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f)),
+        Line.create(Vector.create(5f, 5f, 5f), Vector.create(7f, 7f, 7f)));
+    verifyEqualityAndApproximation(
+        Line.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
+        Line.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
+        Line.create(Vector.create(0.1f, 0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f, 0.9f)),
+        Line.create(Vector.create(5f, 5f, 5f, 5f), Vector.create(7f, 7f, 7f, 7f)));
+  }
+
+  /** Verifies the line equality and approximation operations. */
+  private void verifyEqualityAndApproximation(Line a, Line same, Line close, Line different) {
+    assertTrue(a.equalTo(same));
+    assertTrue(!a.equalTo(close));
+    assertTrue(!a.equalTo(different));
+    assertTrue(a.equalTo(same, 0.2f));
+    assertTrue(a.equalTo(close, 0.2f));
+    assertTrue(!a.equalTo(different, 0.2f));
+  }
+
 }
