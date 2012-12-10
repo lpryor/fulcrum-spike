@@ -236,7 +236,7 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
     assert delta >= 0f;
     int dimensions = dimensions();
     for (int i = 0; i < dimensions; ++i)
-      if (Math.abs(value(i) - that.value(i)) > delta)
+      if (value(i) != that.value(i) && Math.abs(value(i) - that.value(i)) > delta)
         return false;
     return true;
   }
@@ -296,12 +296,12 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
   /* @see Comparable#compareTo(Object) */
   @Override
   public final int compareTo(Vector that) {
-    int max = Math.max(dimensions(), that.dimensions());
-    for (int i = 0; i < max; ++i) {
-      if (i >= dimensions())
-        return -1;
-      if (i >= that.dimensions())
-        return 1;
+    int dimensions = dimensions();
+    if (dimensions < that.dimensions())
+      return -1;
+    if (dimensions > that.dimensions())
+      return 1;
+    for (int i = dimensions - 1; i >= 0; --i) {
       float thisValue = value(i), thatValue = that.value(i);
       if (thisValue < thatValue)
         return -1;

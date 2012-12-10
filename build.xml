@@ -43,6 +43,7 @@
 	<!--
 	  Configure the external libraries required for building.
 	-->
+	<property name="j2objc.jar" location="${j2objc.dir}/lib/j2objc.jar" />
 	<property name="junit.jar" location="${j2objc.dir}/lib/junit-4.10.jar" />
 
 	<!--
@@ -109,12 +110,17 @@
 	<target name="compile">
 		<!-- Compile the main Java files. -->
 		<mkdir dir="${out.main.java}" />
-		<javac srcdir="${src.main.java}" destdir="${out.main.java}" includeantruntime="false" />
+		<javac srcdir="${src.main.java}" destdir="${out.main.java}" includeantruntime="false">
+			<classpath>
+				<path location="${j2objc.jar}" />
+			</classpath>
+		</javac>
 		<!-- Compile the test Java files. -->
 		<mkdir dir="${out.test.java}" />
 		<javac srcdir="${src.test.java}" destdir="${out.test.java}" excludes="Tests.java" includeantruntime="false">
 			<classpath>
 				<path location="${junit.jar}" />
+				<path location="${j2objc.jar}" />
 				<path location="${out.main.java}" />
 			</classpath>
 		</javac>
