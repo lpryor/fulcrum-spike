@@ -32,18 +32,20 @@ import junit.framework.TestCase;
 public class FortuneTest extends TestCase {
 
   /**
-   * The Fortune's algorithm implementation returns valid results for diagrams with less
-   * than three sites.
+   * The Fortune's algorithm implementation returns valid results for diagrams
+   * with less than three sites.
    */
   public void testOperatesOnLessThanThreeSites() {
     Fortune f = Fortune.create();
     assertTrue(f.sites().isEmpty());
     assertTrue(f.edges().isEmpty());
+    assertTrue(f.triangles().isEmpty());
     Vector._2D site1 = Vector.create(1f, 1f);
     f = Fortune.create(site1);
     assertEquals(1, f.sites().size());
     assertTrue(f.sites().contains(site1));
     assertTrue(f.edges().isEmpty());
+    assertTrue(f.triangles().isEmpty());
     Vector._2D site2 = Vector.create(1f, 3f);
     f = Fortune.create(site1, site2);
     assertEquals(2, f.sites().size());
@@ -51,6 +53,7 @@ public class FortuneTest extends TestCase {
     assertTrue(f.sites().contains(site2));
     assertEquals(1, f.edges().size());
     verifyEdge(f.edges().iterator().next());
+    assertTrue(f.triangles().isEmpty());
   }
 
   /**
@@ -68,7 +71,7 @@ public class FortuneTest extends TestCase {
         Vector.create(0f, 0f) //
     };
     float NI = Float.NEGATIVE_INFINITY, PI = Float.POSITIVE_INFINITY;
-    Line._2D[] expected = {
+    Line._2D[] edges = {
         //
         Line.create(Vector.create(0f, -1f), Vector.create(-1f, 0f)), //
         Line.create(Vector.create(0f, -1f), Vector.create(1f, 0f)), //
@@ -79,7 +82,16 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(1f, 0f), Vector.create(PI, 0f)), //
         Line.create(Vector.create(0f, NI), Vector.create(0f, -1f)) //
     };
-    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    Triangle._2D[] triangles = {
+        //
+        Triangle.create(sites[0], sites[1], sites[4]), //
+        Triangle.create(sites[0], sites[3], sites[4]), //
+        Triangle.create(sites[2], sites[3], sites[4]), //
+        Triangle.create(sites[1], sites[2], sites[4]) //
+    };
+    Fortune f = Fortune.create(sites);
+    verifyAndMatchEdges(Arrays.asList(edges), f, 0.000001f);
+    verifyAndMatchTriangles(Arrays.asList(triangles), f, 0.000001f);
   }
 
   /**
@@ -97,7 +109,7 @@ public class FortuneTest extends TestCase {
         Vector.create(0f, 0f) //
     };
     float HF = 1f / 2f, NI = Float.NEGATIVE_INFINITY, PI = Float.POSITIVE_INFINITY;
-    Line._2D[] expected = {
+    Line._2D[] edges = {
         //
         Line.create(Vector.create(-HF, HF), Vector.create(-HF, -HF)), //
         Line.create(Vector.create(-HF, -HF), Vector.create(HF, -HF)), //
@@ -108,7 +120,16 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(HF, -HF), Vector.create(PI, NI)), //
         Line.create(Vector.create(HF, HF), Vector.create(PI, PI)) //
     };
-    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    Triangle._2D[] triangles = {
+        //
+        Triangle.create(sites[0], sites[2], sites[4]), //
+        Triangle.create(sites[0], sites[3], sites[4]), //
+        Triangle.create(sites[1], sites[3], sites[4]), //
+        Triangle.create(sites[2], sites[1], sites[4]) //
+    };
+    Fortune f = Fortune.create(sites);
+    verifyAndMatchEdges(Arrays.asList(edges), f, 0.000001f);
+    verifyAndMatchTriangles(Arrays.asList(triangles), f, 0.000001f);
   }
 
   /**
@@ -125,14 +146,16 @@ public class FortuneTest extends TestCase {
         Vector.create(2f, 0f) //
     };
     float NI = Float.NEGATIVE_INFINITY, PI = Float.POSITIVE_INFINITY;
-    Line._2D[] expected = {
+    Line._2D[] edges = {
         //
         Line.create(Vector.create(-1.5f, NI), Vector.create(-1.5f, PI)), //
         Line.create(Vector.create(-0.5f, NI), Vector.create(-0.5f, PI)), //
         Line.create(Vector.create(0.5f, NI), Vector.create(0.5f, PI)), //
         Line.create(Vector.create(1.5f, NI), Vector.create(1.5f, PI)) //
     };
-    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    Fortune f = Fortune.create(sites);
+    verifyAndMatchEdges(Arrays.asList(edges), f, 0.000001f);
+    assertTrue(f.triangles().isEmpty());
   }
 
   /**
@@ -149,14 +172,16 @@ public class FortuneTest extends TestCase {
         Vector.create(0f, 2f) //
     };
     float NI = Float.NEGATIVE_INFINITY, PI = Float.POSITIVE_INFINITY;
-    Line._2D[] expected = {
+    Line._2D[] edges = {
         //
         Line.create(Vector.create(NI, -1.5f), Vector.create(PI, -1.5f)), //
         Line.create(Vector.create(NI, -0.5f), Vector.create(PI, -0.5f)), //
         Line.create(Vector.create(NI, 0.5f), Vector.create(PI, 0.5f)), //
         Line.create(Vector.create(NI, 1.5f), Vector.create(PI, 1.5f)) //
     };
-    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    Fortune f = Fortune.create(sites);
+    verifyAndMatchEdges(Arrays.asList(edges), f, 0.000001f);
+    assertTrue(f.triangles().isEmpty());
   }
 
   /**
@@ -175,6 +200,7 @@ public class FortuneTest extends TestCase {
     assertTrue(actual.edges().size() > sites.length);
     for (Fortune.Edge a : actual.edges())
       verifyEdge(a);
+    assertFalse(actual.triangles().isEmpty());
   }
 
   /** Verifies that the generated edges are correct. */
@@ -227,6 +253,37 @@ public class FortuneTest extends TestCase {
     for (Line._2D e : expected)
       if (e.begin().equalTo(actual.begin(), delta) && e.end().equalTo(actual.end(), delta)
           || e.begin().equalTo(actual.end(), delta) && e.end().equalTo(actual.begin(), delta))
+        return true;
+    return false;
+  }
+
+  /** Verifies that the generated triangles are correct. */
+  private void verifyAndMatchTriangles(Collection<Triangle._2D> expected, Fortune actual, float delta) {
+    assertEquals(expected.size(), actual.triangles().size());
+    for (Triangle._2D a : actual.triangles())
+      assertTrue(a.toString(), matchTriangle(expected, a, delta));
+  }
+
+  /** Verifies that a single triangle is correct. */
+  private boolean matchTriangle(Collection<Triangle._2D> expected, Triangle._2D actual, float delta) {
+    for (Triangle._2D e : expected)
+      if (matchVertices(e, actual, delta))
+        return true;
+    return false;
+  }
+
+  /** Verifies that two triangles have the same vertices. */
+  private boolean matchVertices(Triangle._2D expected, Triangle._2D actual, float delta) {
+    for (int a = 0; a < 3; ++a)
+      if (!matchVertex(expected, actual.vertex(a), delta))
+        return false;
+    return true;
+  }
+
+  /** Verifies that a vertex appears in a triangle. */
+  private boolean matchVertex(Triangle._2D expected, Vector._2D actual, float delta) {
+    for (int e = 0; e < 3; ++e)
+      if (expected.vertex(e).equalTo(actual, delta))
         return true;
     return false;
   }

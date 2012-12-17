@@ -29,6 +29,8 @@ import java.util.Set;
 import com.google.j2objc.annotations.AutoreleasePool;
 import com.google.j2objc.annotations.Weak;
 
+import fulcrum.text.Strings;
+
 /**
  * An implementation of Fortune's algorithm that generates a bare-bones 2D
  * Voronoi diagram in {@code n log n} time.
@@ -62,8 +64,10 @@ public final class Fortune {
     for (Vector._2D site : sites)
       set.add(site);
     HashSet<Edge> edges = new HashSet<Fortune.Edge>();
-    apply(set, edges);
-    return new Fortune(Collections.unmodifiableSet(set), Collections.unmodifiableSet(edges));
+    HashSet<Triangle._2D> triangles = new HashSet<Triangle._2D>();
+    apply(set, edges, triangles);
+    return new Fortune(Collections.unmodifiableSet(set), Collections.unmodifiableSet(edges),
+        Collections.unmodifiableSet(triangles));
   }
 
   /**
@@ -71,7 +75,7 @@ public final class Fortune {
    * supplied set with the Voronoi edges.
    */
   @AutoreleasePool
-  private static void apply(HashSet<Vector._2D> sites, HashSet<Edge> edges) {
+  private static void apply(HashSet<Vector._2D> sites, HashSet<Edge> edges, HashSet<Triangle._2D> triangles) {
     if (sites.size() < 2)
       return;
     if (sites.size() == 2) {
@@ -81,18 +85,21 @@ public final class Fortune {
       edges.add(edge);
       return;
     }
-    new Algorithm(sites, edges).apply();
+    new Algorithm(sites, edges, triangles).apply();
   }
 
   /** The sites provided as input to the algorithm. */
   private final Set<Vector._2D> sites;
   /** The edges returned as output from the algorithm. */
   private final Set<Edge> edges;
+  /** The triangulation discovered by the algorithm. */
+  private final Set<Triangle._2D> triangles;
 
   /** Creates a new implementation of Fortune's algorithm. */
-  private Fortune(Set<Vector._2D> sites, Set<Edge> edges) {
+  private Fortune(Set<Vector._2D> sites, Set<Edge> edges, Set<Triangle._2D> triangles) {
     this.sites = sites;
     this.edges = edges;
+    this.triangles = triangles;
   }
 
   /** Returns the sites provided as input to the algorithm. */
@@ -103,6 +110,11 @@ public final class Fortune {
   /** Returns the edges returned as output from the algorithm. */
   public Set<Edge> edges() {
     return edges;
+  }
+
+  /** Returns the triangulation discovered by the algorithm. */
+  public Set<Triangle._2D> triangles() {
+    return triangles;
   }
 
   /**
@@ -243,6 +255,12 @@ public final class Fortune {
         y = location.value(Y);
       return Vector.create(x, y);
     }
+    
+    /* @see Object#toString() */
+    @Override
+    public String toString() {
+      return Strings.format(getClass(), type, begin, location, end);
+    }
 
     /**
      * The possible types of edges.
@@ -269,6 +287,8 @@ public final class Fortune {
 
     /** The set to collect the generated edges in. */
     private final HashSet<Edge> edges;
+    /** The set to collect the generated triangles in. */
+    private final HashSet<Triangle._2D> triangles;
     /** The currently active circle candidates for the parabolas. */
     private final HashMap<Node.Parabola, Event.Circle> circles = new HashMap<Node.Parabola, Event.Circle>();
     /** The parabolas that require examination after handling an event. */
@@ -279,10 +299,11 @@ public final class Fortune {
     private Node root = null;
 
     /** Creates a new algorithm implementation. */
-    Algorithm(HashSet<Vector._2D> sites, HashSet<Edge> edges) {
+    Algorithm(HashSet<Vector._2D> sites, HashSet<Edge> edges, HashSet<Triangle._2D> triangles) {
       for (Vector._2D site : sites)
         queue.add(new Event.Site(site));
       this.edges = edges;
+      this.triangles = triangles;
     }
 
     /** Processes all the events in the queue and populates the set of edges. */
@@ -381,6 +402,7 @@ public final class Fortune {
         intersection = middle.rightAncestor();
         parent.parent().replace(parent, leftSibling);
       }
+      triangles.add(event.triangle());
       parent.edge().add(event.circumcenter());
       intersection.edge().add(event.circumcenter());
       Edge edge = new Edge(left.site(), right.site());
@@ -723,6 +745,8 @@ public final class Fortune {
       private final Node.Parabola middle;
       /** The node to the right of the two other nodes. */
       private final Node.Parabola right;
+      /** The triangle formed by the three nodes. */
+      private final Triangle._2D triangle;
       /** The circumcenter of the triangle formed by the three nodes. */
       private final Vector._2D circumcenter;
       /** The location of this event in the diagram. */
@@ -735,7 +759,8 @@ public final class Fortune {
         this.left = left;
         this.middle = middle;
         this.right = right;
-        this.circumcenter = Triangle.create(left.site(), middle.site(), right.site()).circumcenter();
+        this.triangle = Triangle.create(left.site(), middle.site(), right.site());
+        this.circumcenter = triangle.circumcenter();
         this.location = Vector.create(circumcenter.value(X),
             Math.round(circumcenter.value(Y) + middle.site().distance(circumcenter)));
       }
@@ -753,6 +778,11 @@ public final class Fortune {
       /** Returns the node to the right of the two other nodes. */
       Node.Parabola right() {
         return right;
+      }
+
+      /** Returns the triangle formed by the three nodes. */
+      Triangle._2D triangle() {
+        return triangle;
       }
 
       /** Returns the circumcenter of the triangle formed by the three nodes. */
