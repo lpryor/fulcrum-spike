@@ -32,6 +32,28 @@ import junit.framework.TestCase;
 public class FortuneTest extends TestCase {
 
   /**
+   * The Fortune's algorithm implementation returns valid results for diagrams with less
+   * than three sites.
+   */
+  public void testOperatesOnLessThanThreeSites() {
+    Fortune f = Fortune.create();
+    assertTrue(f.sites().isEmpty());
+    assertTrue(f.edges().isEmpty());
+    Vector._2D site1 = Vector.create(1f, 1f);
+    f = Fortune.create(site1);
+    assertEquals(1, f.sites().size());
+    assertTrue(f.sites().contains(site1));
+    assertTrue(f.edges().isEmpty());
+    Vector._2D site2 = Vector.create(1f, 3f);
+    f = Fortune.create(site1, site2);
+    assertEquals(2, f.sites().size());
+    assertTrue(f.sites().contains(site1));
+    assertTrue(f.sites().contains(site2));
+    assertEquals(1, f.edges().size());
+    verifyEdge(f.edges().iterator().next());
+  }
+
+  /**
    * The Fortune's algorithm implementation is capable of generating a diagram
    * with a diamond-shaped polygon at the origin and four edges that radiate
    * outward infinitely along the horizontal and vertical axis.
@@ -57,7 +79,7 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(1f, 0f), Vector.create(PI, 0f)), //
         Line.create(Vector.create(0f, NI), Vector.create(0f, -1f)) //
     };
-    verifyEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
   }
 
   /**
@@ -86,7 +108,7 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(HF, -HF), Vector.create(PI, NI)), //
         Line.create(Vector.create(HF, HF), Vector.create(PI, PI)) //
     };
-    verifyEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
   }
 
   /**
@@ -110,7 +132,7 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(0.5f, NI), Vector.create(0.5f, PI)), //
         Line.create(Vector.create(1.5f, NI), Vector.create(1.5f, PI)) //
     };
-    verifyEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
   }
 
   /**
@@ -134,12 +156,12 @@ public class FortuneTest extends TestCase {
         Line.create(Vector.create(NI, 0.5f), Vector.create(PI, 0.5f)), //
         Line.create(Vector.create(NI, 1.5f), Vector.create(PI, 1.5f)) //
     };
-    verifyEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
+    verifyAndMatchEdges(Arrays.asList(expected), Fortune.create(sites), 0.000001f);
   }
 
   /**
    * The Fortune's algorithm implementation is capable of generating a diagram
-   * from a large number of sites.
+   * from a large number of random sites.
    */
   public void testGeneratesEdgesFromLargeSiteSets() {
     int side = 32;
@@ -156,7 +178,7 @@ public class FortuneTest extends TestCase {
   }
 
   /** Verifies that the generated edges are correct. */
-  private void verifyEdges(Collection<Line._2D> expected, Fortune actual, float delta) {
+  private void verifyAndMatchEdges(Collection<Line._2D> expected, Fortune actual, float delta) {
     assertEquals(expected.size(), actual.edges().size());
     for (Fortune.Edge a : actual.edges()) {
       verifyEdge(a);
@@ -206,7 +228,6 @@ public class FortuneTest extends TestCase {
       if (e.begin().equalTo(actual.begin(), delta) && e.end().equalTo(actual.end(), delta)
           || e.begin().equalTo(actual.end(), delta) && e.end().equalTo(actual.begin(), delta))
         return true;
-    System.out.println(expected);
     return false;
   }
 

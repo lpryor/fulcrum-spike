@@ -61,25 +61,27 @@ public final class Fortune {
     HashSet<Vector._2D> set = new HashSet<Vector._2D>();
     for (Vector._2D site : sites)
       set.add(site);
-    return create(set);
+    HashSet<Edge> edges = new HashSet<Fortune.Edge>();
+    apply(set, edges);
+    return new Fortune(Collections.unmodifiableSet(set), Collections.unmodifiableSet(edges));
   }
 
   /**
-   * Applies Fortune's algorithm to the specified sites and returns a structure
-   * containing the sites and Voronoi edges.
+   * Applies Fortune's algorithm to the specified sites and populates the
+   * supplied set with the Voronoi edges.
    */
-  private static Fortune create(HashSet<Vector._2D> sites) {
+  @AutoreleasePool
+  private static void apply(HashSet<Vector._2D> sites, HashSet<Edge> edges) {
     if (sites.size() < 2)
-      return new Fortune(sites, Collections.<Edge> emptySet());
+      return;
     if (sites.size() == 2) {
       Iterator<Vector._2D> iter = sites.iterator();
       Edge edge = new Edge(iter.next(), iter.next());
       edge.finish();
-      return new Fortune(sites, Collections.<Edge> singleton(edge));
+      edges.add(edge);
+      return;
     }
-    HashSet<Edge> edges = new HashSet<Fortune.Edge>();
     new Algorithm(sites, edges).apply();
-    return new Fortune(Collections.unmodifiableSet(sites), Collections.unmodifiableSet(edges));
   }
 
   /** The sites provided as input to the algorithm. */
@@ -202,18 +204,18 @@ public final class Fortune {
         swap();
       if (begin == null) {
         type = Type.LINE;
-        direction = Vector.create(-(right.value(Y) - left.value(Y)), right.value(X) - left.value(X));
+        direction = Vector.create(-(right.value(Y) - left.value(Y)), right.value(X) - left.value(X)).normalize();
         location = left.add(right.subtract(left).divide(2f));
         begin = infinity(location, direction.multiply(-1f));
         end = infinity(location, direction);
       } else if (end == null) {
         type = Type.RAY;
-        direction = Vector.create(-(right.value(Y) - left.value(Y)), right.value(X) - left.value(X));
-        location = begin.add(direction.normalize());
+        direction = Vector.create(-(right.value(Y) - left.value(Y)), right.value(X) - left.value(X)).normalize();
+        location = begin.add(direction);
         end = infinity(location, direction);
       } else {
         type = Type.SEGMENT;
-        direction = end.subtract(begin);
+        direction = end.subtract(begin).normalize();
         location = begin.add(direction.divide(2f));
       }
       if (left.value(X) > right.value(X) || left.value(X) == right.value(X) && left.value(Y) > right.value(Y))

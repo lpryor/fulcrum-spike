@@ -155,8 +155,8 @@ public abstract class Polygon implements Cloneable {
       float begin = previous.value(dimension);
       float end = current.value(dimension);
       boolean below = normal.value(dimension) >= 0f;
-      boolean beginIn = below ? begin >= plane.value(dimension) : begin < plane.value(dimension);
-      boolean endIn = below ? end >= plane.value(dimension) : end < plane.value(dimension);
+      boolean beginIn = below ? begin >= plane.value(dimension) : begin <= plane.value(dimension);
+      boolean endIn = below ? end >= plane.value(dimension) : end <= plane.value(dimension);
       if (beginIn && endIn)
         push(output, current);
       else if (beginIn)
