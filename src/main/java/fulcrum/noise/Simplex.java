@@ -68,15 +68,6 @@ public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable
   /** Unskewing factor for 4D. */
   private static final float UNSKEW_4D = (5f - Numbers.sqrt(5f)) / 20f;
 
-  /**
-   * This method is supposedly a *lot* faster than using
-   * {@code (int)Math.floor(x)}.
-   */
-  private static int fastfloor(float x) {
-    int xi = (int) x;
-    return x < xi ? xi - 1 : xi;
-  }
-
   /** The permutation table. */
   private final short[] permutations = new short[512];
   /** The permutation modulus table. */
@@ -106,8 +97,8 @@ public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable
     float n0, n1, n2; // Noise contributions from the three corners
     // Skew the input space to determine which simplex cell we're in
     float s = (x + y) * SKEW_2D; // Hairy factor for 2D
-    int i = fastfloor(x + s);
-    int j = fastfloor(y + s);
+    int i = Numbers.floor(x + s);
+    int j = Numbers.floor(y + s);
     float t = (i + j) * UNSKEW_2D;
     float X0 = i - t; // Unskew the cell origin back to (x,y) space
     float Y0 = j - t;
@@ -176,9 +167,9 @@ public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable
     float n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
     float s = (x + y + z) * SKEW_3D; // Very nice and simple skew factor for 3D
-    int i = fastfloor(x + s);
-    int j = fastfloor(y + s);
-    int k = fastfloor(z + s);
+    int i = Numbers.floor(x + s);
+    int j = Numbers.floor(y + s);
+    int k = Numbers.floor(z + s);
     float t = (i + j + k) * UNSKEW_3D;
     float X0 = i - t; // Unskew the cell origin back to (x,y,z) space
     float Y0 = j - t;
@@ -308,10 +299,10 @@ public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable
     float n0, n1, n2, n3, n4; // Noise contributions from the five corners
     // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
     float s = (x + y + z + w) * SKEW_4D; // Factor for 4D skewing
-    int i = fastfloor(x + s);
-    int j = fastfloor(y + s);
-    int k = fastfloor(z + s);
-    int l = fastfloor(w + s);
+    int i = Numbers.floor(x + s);
+    int j = Numbers.floor(y + s);
+    int k = Numbers.floor(z + s);
+    int l = Numbers.floor(w + s);
     float t = (i + j + k + l) * UNSKEW_4D; // Factor for 4D unskewing
     float X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
     float Y0 = j - t;

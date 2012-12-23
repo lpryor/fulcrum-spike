@@ -43,6 +43,7 @@ public class Tests extends TestSuite {
         fulcrum.math.LineTest.class, //
         fulcrum.math.TriangleTest.class, //
         fulcrum.math.PolygonTest.class, //
+        fulcrum.math.QuadtreeTest.class, //
         fulcrum.math.FortuneTest.class, //
         fulcrum.math.DelaunayTest.class, //
         fulcrum.math.VoronoiTest.class, //

@@ -25,18 +25,18 @@ package fulcrum.math;
 public abstract class Vector implements Cloneable, Comparable<Vector> {
 
   /** Creates a new two-dimensional vector with the specified components. */
-  public static Vector._2D create(float value0, float value1) {
-    return new Vector._2D(value0, value1);
+  public static _2D create(float value0, float value1) {
+    return new _2D(value0, value1);
   }
 
   /** Creates a new three-dimensional vector with the specified components. */
-  public static Vector._3D create(float value0, float value1, float value2) {
-    return new Vector._3D(value0, value1, value2);
+  public static _3D create(float value0, float value1, float value2) {
+    return new _3D(value0, value1, value2);
   }
 
   /** Creates a new four-dimensional vector with the specified components. */
-  public static Vector._4D create(float value0, float value1, float value2, float value3) {
-    return new Vector._4D(value0, value1, value2, value3);
+  public static _4D create(float value0, float value1, float value2, float value3) {
+    return new _4D(value0, value1, value2, value3);
   }
 
   /** Creates a new vector. */
@@ -293,6 +293,15 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
     return true;
   }
 
+  /** Returns a 2D version of this vector. */
+  public abstract _2D to2D();
+
+  /** Returns a 3D version of this vector. */
+  public abstract _3D to3D();
+
+  /** Returns a 4D version of this vector. */
+  public abstract _4D to4D();
+
   /* @see Comparable#compareTo(Object) */
   @Override
   public final int compareTo(Vector that) {
@@ -383,7 +392,7 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#normalize() */
     @Override
-    public Vector._2D normalize() {
+    public _2D normalize() {
       float length = length();
       if (length == 0f || length == 1f)
         return this;
@@ -398,59 +407,74 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#extend(float) */
     @Override
-    public Vector._3D extend(float component) {
+    public _3D extend(float component) {
       return create(value0, value1, component);
     }
 
     /* @see Vector#add(float) */
     @Override
-    public Vector._2D add(float scalar) {
+    public _2D add(float scalar) {
       return create(value0 + scalar, value1 + scalar);
     }
 
     /* @see Vector#subtract(float) */
     @Override
-    public Vector._2D subtract(float scalar) {
+    public _2D subtract(float scalar) {
       return create(value0 - scalar, value1 - scalar);
     }
 
     /* @see Vector#multiply(float) */
     @Override
-    public Vector._2D multiply(float scalar) {
+    public _2D multiply(float scalar) {
       return create(value0 * scalar, value1 * scalar);
     }
 
     /* @see Vector#divide(float) */
     @Override
-    public Vector._2D divide(float scalar) {
+    public _2D divide(float scalar) {
       assert scalar != 0f;
       return create(value0 / scalar, value1 / scalar);
     }
 
     /* @see Vector#add(Vector) */
     @Override
-    public Vector._2D add(Vector that) {
+    public _2D add(Vector that) {
       return create(value0 + that.value(0), value1 + that.value(1));
     }
 
     /* @see Vector#subtract(Vector) */
     @Override
-    public Vector._2D subtract(Vector that) {
+    public _2D subtract(Vector that) {
       return create(value0 - that.value(0), value1 - that.value(1));
     }
 
     /* @see Vector#multiply(Vector) */
     @Override
-    public Vector._2D multiply(Vector that) {
+    public _2D multiply(Vector that) {
       return create(value0 * that.value(0), value1 * that.value(1));
     }
 
     /* @see Vector#divide(Vector) */
     @Override
-    public Vector._2D divide(Vector that) {
+    public _2D divide(Vector that) {
       assert that.value(0) != 0f;
       assert that.value(1) != 0f;
       return create(value0 / that.value(0), value1 / that.value(1));
+    }
+
+    /* @see Vector#to2D() */
+    public _2D to2D() {
+      return this;
+    }
+
+    /* @see Vector#to3D() */
+    public _3D to3D() {
+      return create(value0, value1, 0f);
+    }
+
+    /* @see Vector#to4D() */
+    public _4D to4D() {
+      return create(value0, value1, 0f, 0f);
     }
 
   }
@@ -499,7 +523,7 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#normalize() */
     @Override
-    public Vector._3D normalize() {
+    public _3D normalize() {
       float length = length();
       if (length == 0f || length == 1f)
         return this;
@@ -508,66 +532,81 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#reduce() */
     @Override
-    public Vector._2D reduce() {
-      return Vector.create(value0, value1);
+    public _2D reduce() {
+      return create(value0, value1);
     }
 
     /* @see Vector#extend(float) */
     @Override
-    public Vector._4D extend(float component) {
+    public _4D extend(float component) {
       return create(value0, value1, value2, component);
     }
 
     /* @see Vector#add(float) */
     @Override
-    public Vector._3D add(float scalar) {
+    public _3D add(float scalar) {
       return create(value0 + scalar, value1 + scalar, value2 + scalar);
     }
 
     /* @see Vector#subtract(float) */
     @Override
-    public Vector._3D subtract(float scalar) {
+    public _3D subtract(float scalar) {
       return create(value0 - scalar, value1 - scalar, value2 - scalar);
     }
 
     /* @see Vector#multiply(float) */
     @Override
-    public Vector._3D multiply(float scalar) {
+    public _3D multiply(float scalar) {
       return create(value0 * scalar, value1 * scalar, value2 * scalar);
     }
 
     /* @see Vector#divide(float) */
     @Override
-    public Vector._3D divide(float scalar) {
+    public _3D divide(float scalar) {
       assert scalar != 0f;
       return create(value0 / scalar, value1 / scalar, value2 / scalar);
     }
 
     /* @see Vector#add(Vector) */
     @Override
-    public Vector._3D add(Vector that) {
+    public _3D add(Vector that) {
       return create(value0 + that.value(0), value1 + that.value(1), value2 + that.value(2));
     }
 
     /* @see Vector#subtract(Vector) */
     @Override
-    public Vector._3D subtract(Vector that) {
+    public _3D subtract(Vector that) {
       return create(value0 - that.value(0), value1 - that.value(1), value2 - that.value(2));
     }
 
     /* @see Vector#multiply(Vector) */
     @Override
-    public Vector._3D multiply(Vector that) {
+    public _3D multiply(Vector that) {
       return create(value0 * that.value(0), value1 * that.value(1), value2 * that.value(2));
     }
 
     /* @see Vector#divide(Vector) */
     @Override
-    public Vector._3D divide(Vector that) {
+    public _3D divide(Vector that) {
       assert that.value(0) != 0f;
       assert that.value(1) != 0f;
       assert that.value(2) != 0f;
       return create(value0 / that.value(0), value1 / that.value(1), value2 / that.value(2));
+    }
+
+    /* @see Vector#to2D() */
+    public _2D to2D() {
+      return create(value0, value1);
+    }
+
+    /* @see Vector#to3D() */
+    public _3D to3D() {
+      return this;
+    }
+
+    /* @see Vector#to4D() */
+    public _4D to4D() {
+      return create(value0, value1, value2, 0f);
     }
 
   }
@@ -621,7 +660,7 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#normalize() */
     @Override
-    public Vector._4D normalize() {
+    public _4D normalize() {
       float length = length();
       if (length == 0f || length == 1f)
         return this;
@@ -630,8 +669,8 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#reduce() */
     @Override
-    public Vector._3D reduce() {
-      return Vector.create(value0, value1, value2);
+    public _3D reduce() {
+      return create(value0, value1, value2);
     }
 
     /* @see Vector#extend(float) */
@@ -642,55 +681,70 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
 
     /* @see Vector#add(float) */
     @Override
-    public Vector._4D add(float scalar) {
+    public _4D add(float scalar) {
       return create(value0 + scalar, value1 + scalar, value2 + scalar, value3 + scalar);
     }
 
     /* @see Vector#subtract(float) */
     @Override
-    public Vector._4D subtract(float scalar) {
+    public _4D subtract(float scalar) {
       return create(value0 - scalar, value1 - scalar, value2 - scalar, value3 - scalar);
     }
 
     /* @see Vector#multiply(float) */
     @Override
-    public Vector._4D multiply(float scalar) {
+    public _4D multiply(float scalar) {
       return create(value0 * scalar, value1 * scalar, value2 * scalar, value3 * scalar);
     }
 
     /* @see Vector#divide(float) */
     @Override
-    public Vector._4D divide(float scalar) {
+    public _4D divide(float scalar) {
       assert scalar != 0f;
       return create(value0 / scalar, value1 / scalar, value2 / scalar, value3 / scalar);
     }
 
     /* @see Vector#add(Vector) */
     @Override
-    public Vector._4D add(Vector that) {
+    public _4D add(Vector that) {
       return create(value0 + that.value(0), value1 + that.value(1), value2 + that.value(2), value3 + that.value(3));
     }
 
     /* @see Vector#subtract(Vector) */
     @Override
-    public Vector._4D subtract(Vector that) {
+    public _4D subtract(Vector that) {
       return create(value0 - that.value(0), value1 - that.value(1), value2 - that.value(2), value3 - that.value(3));
     }
 
     /* @see Vector#multiply(Vector) */
     @Override
-    public Vector._4D multiply(Vector that) {
+    public _4D multiply(Vector that) {
       return create(value0 * that.value(0), value1 * that.value(1), value2 * that.value(2), value3 * that.value(3));
     }
 
     /* @see Vector#divide(Vector) */
     @Override
-    public Vector._4D divide(Vector that) {
+    public _4D divide(Vector that) {
       assert that.value(0) != 0f;
       assert that.value(1) != 0f;
       assert that.value(2) != 0f;
       assert that.value(3) != 0f;
       return create(value0 / that.value(0), value1 / that.value(1), value2 / that.value(2), value3 / that.value(3));
+    }
+
+    /* @see Vector#to2D() */
+    public _2D to2D() {
+      return create(value0, value1);
+    }
+
+    /* @see Vector#to3D() */
+    public _3D to3D() {
+      return create(value0, value1, value2);
+    }
+
+    /* @see Vector#to4D() */
+    public _4D to4D() {
+      return this;
     }
 
   }

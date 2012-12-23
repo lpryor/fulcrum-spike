@@ -63,6 +63,22 @@ public class VectorTest extends TestCase {
       assertTrue(a.toString().contains(String.valueOf(value)));
   }
 
+  /** Vectors can be converted between dimensions. */
+  public void testProvidesConversionBetweenDimensions() {
+    Vector._2D _2d = Vector.create(1f, 2f);
+    Vector._3D _3d = _2d.extend(0f);
+    Vector._4D _4d = _3d.extend(0f);
+    assertEquals(_2d, _2d.to2D());
+    assertEquals(_3d, _2d.to3D());
+    assertEquals(_4d, _2d.to4D());
+    assertEquals(_2d, _3d.to2D());
+    assertEquals(_3d, _3d.to3D());
+    assertEquals(_4d, _3d.to4D());
+    assertEquals(_2d, _4d.to2D());
+    assertEquals(_3d, _4d.to3D());
+    assertEquals(_4d, _4d.to4D());
+  }
+
   /**
    * Vectors are capable of calculating their length.
    */

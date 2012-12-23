@@ -25,18 +25,18 @@ package fulcrum.math;
 public abstract class Box implements Cloneable {
 
   /** Creates a new two-dimensional box with the specified bounds. */
-  public static Box._2D create(Vector._2D corner1, Vector._2D corner2) {
-    return new Box._2D(corner1, corner2);
+  public static _2D create(Vector._2D corner1, Vector._2D corner2) {
+    return new _2D(corner1, corner2);
   }
 
   /** Creates a new three-dimensional box with the specified bounds. */
-  public static Box._3D create(Vector._3D corner1, Vector._3D corner2) {
-    return new Box._3D(corner1, corner2);
+  public static _3D create(Vector._3D corner1, Vector._3D corner2) {
+    return new _3D(corner1, corner2);
   }
 
   /** Creates a new four-dimensional box with the specified bounds. */
-  public static Box._4D create(Vector._4D corner1, Vector._4D corner2) {
-    return new Box._4D(corner1, corner2);
+  public static _4D create(Vector._4D corner1, Vector._4D corner2) {
+    return new _4D(corner1, corner2);
   }
 
   /** Creates a new box. */
@@ -55,6 +55,12 @@ public abstract class Box implements Cloneable {
 
   /** Returns the size of this box. */
   public abstract Vector size();
+
+  /** Computes the area that this box intersects that box. */
+  public abstract Box intersection(Box that);
+
+  /** Computes the area that contains both this box and that box. */
+  public abstract Box union(Box that);
 
   /** Returns true if this box contains the specified point. */
   public final boolean contains(Vector point) {
@@ -98,6 +104,21 @@ public abstract class Box implements Cloneable {
     assert that != null;
     assert delta >= 0f;
     return lower().equalTo(that.lower(), delta) && upper().equalTo(that.upper(), delta);
+  }
+
+  /** Returns a 2D version of this box. */
+  public _2D to2D() {
+    return Box.create(lower().to2D(), upper().to2D());
+  }
+
+  /** Returns a 3D version of this box. */
+  public _3D to3D() {
+    return Box.create(lower().to3D(), upper().to3D());
+  }
+
+  /** Returns a 4D version of this box. */
+  public _4D to4D() {
+    return Box.create(lower().to4D(), upper().to4D());
   }
 
   /* @see Object#hashCode() */
@@ -178,6 +199,41 @@ public abstract class Box implements Cloneable {
       return upper.subtract(lower);
     }
 
+    /* @see Box#intersection(Box) */
+    public _2D intersection(Box that) {
+      if (contains(that))
+        return that.to2D();
+      if (that.contains(this))
+        return this;
+      float l0 = Math.max(lower.value(0), that.lower().value(0));
+      float u0 = Math.min(upper.value(0), that.upper().value(0));
+      if (l0 > u0)
+        return null;
+      float l1 = Math.max(lower.value(1), that.lower().value(1));
+      float u1 = Math.min(upper.value(1), that.upper().value(1));
+      if (l1 > u1)
+        return null;
+      return create(Vector.create(l0, l1), Vector.create(u0, u1));
+    }
+
+    /* @see Box#union(Box) */
+    public _2D union(Box that) {
+      if (contains(that))
+        return this;
+      if (that.contains(this))
+        return that.to2D();
+      return create(
+          Vector.create(Math.min(lower.value(0), that.lower().value(0)),
+              Math.min(lower.value(1), that.lower().value(1))),
+          Vector.create(Math.max(upper.value(0), that.upper().value(0)),
+              Math.max(upper.value(1), that.upper().value(1))));
+    }
+
+    /* @see Box#to2D() */
+    public _2D to2D() {
+      return this;
+    }
+
   }
 
   /**
@@ -228,6 +284,39 @@ public abstract class Box implements Cloneable {
     @Override
     public Vector._3D size() {
       return upper.subtract(lower);
+    }
+
+    /* @see Box#intersection(Box) */
+    public _3D intersection(Box that) {
+      float l0 = Math.max(lower.value(0), that.lower().value(0));
+      float u0 = Math.min(upper.value(0), that.upper().value(0));
+      if (l0 > u0)
+        return null;
+      float l1 = Math.max(lower.value(1), that.lower().value(1));
+      float u1 = Math.min(upper.value(1), that.upper().value(1));
+      if (l1 > u1)
+        return null;
+      float l2 = Math.max(lower.value(2), that.lower().value(2));
+      float u2 = Math.min(upper.value(2), that.upper().value(2));
+      if (l2 > u2)
+        return null;
+      return create(Vector.create(l0, l1, l2), Vector.create(u0, u1, u2));
+    }
+
+    /* @see Box#union(Box) */
+    public _3D union(Box that) {
+      return create(
+          Vector.create(Math.min(lower.value(0), that.lower().value(0)),
+              Math.min(lower.value(1), that.lower().value(1)), //
+              Math.min(lower.value(2), that.lower().value(2))),
+          Vector.create(Math.max(upper.value(0), that.upper().value(0)),
+              Math.max(upper.value(1), that.upper().value(1)), //
+              Math.max(upper.value(2), that.upper().value(2))));
+    }
+
+    /* @see Box#to3D() */
+    public _3D to3D() {
+      return this;
     }
 
   }
@@ -282,6 +371,45 @@ public abstract class Box implements Cloneable {
     @Override
     public Vector._4D size() {
       return upper.subtract(lower);
+    }
+
+    /* @see Box#intersection(Box) */
+    public _4D intersection(Box that) {
+      float l0 = Math.max(lower.value(0), that.lower().value(0));
+      float u0 = Math.min(upper.value(0), that.upper().value(0));
+      if (l0 > u0)
+        return null;
+      float l1 = Math.max(lower.value(1), that.lower().value(1));
+      float u1 = Math.min(upper.value(1), that.upper().value(1));
+      if (l1 > u1)
+        return null;
+      float l2 = Math.max(lower.value(2), that.lower().value(2));
+      float u2 = Math.min(upper.value(2), that.upper().value(2));
+      if (l2 > u2)
+        return null;
+      float l3 = Math.max(lower.value(3), that.lower().value(3));
+      float u3 = Math.min(upper.value(3), that.upper().value(3));
+      if (l3 > u3)
+        return null;
+      return create(Vector.create(l0, l1, l2, l3), Vector.create(u0, u1, u2, u3));
+    }
+
+    /* @see Box#union(Box) */
+    public _4D union(Box that) {
+      return create(
+          Vector.create(Math.min(lower.value(0), that.lower().value(0)),
+              Math.min(lower.value(1), that.lower().value(1)), //
+              Math.min(lower.value(2), that.lower().value(2)), //
+              Math.min(lower.value(3), that.lower().value(3))),
+          Vector.create(Math.max(upper.value(0), that.upper().value(0)),
+              Math.max(upper.value(1), that.upper().value(1)), //
+              Math.max(upper.value(2), that.upper().value(2)), //
+              Math.max(upper.value(3), that.upper().value(3))));
+    }
+
+    /* @see Box#to4D() */
+    public _4D to4D() {
+      return this;
     }
 
   }

@@ -41,6 +41,22 @@ public class BoxTest extends TestCase {
         Vector.create(1f, 2f, 3f, 4f), Vector.create(5f, 6f, 7f, 8f));
   }
 
+  /** Vectors can be converted between dimensions. */
+  public void testProvidesConversionBetweenDimensions() {
+    Box._2D _2d = Box.create(Vector.create(1f, 2f), Vector.create(2f, 3f));
+    Box._3D _3d = Box.create(_2d.lower().extend(0f), _2d.upper().extend(0f));
+    Box._4D _4d = Box.create(_3d.lower().extend(0f), _3d.upper().extend(0f));
+    assertEquals(_2d, _2d.to2D());
+    assertEquals(_3d, _2d.to3D());
+    assertEquals(_4d, _2d.to4D());
+    assertEquals(_2d, _3d.to2D());
+    assertEquals(_3d, _3d.to3D());
+    assertEquals(_4d, _3d.to4D());
+    assertEquals(_2d, _4d.to2D());
+    assertEquals(_3d, _4d.to3D());
+    assertEquals(_4d, _4d.to4D());
+  }
+
   /**
    * Verifies the basic accessors, hashing, equality and string conversion
    * methods.
@@ -79,18 +95,15 @@ public class BoxTest extends TestCase {
    * Boxes provide tests for equality and approximation with other boxes.
    */
   public void testProvidesBoxEqualityAndApproximationOperations() {
-    verifyEqualityAndApproximation(
-        Box.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
+    verifyEqualityAndApproximation(Box.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
         Box.create(Vector.create(0f, 0f), Vector.create(1f, 1f)),
         Box.create(Vector.create(0.1f, 0.1f), Vector.create(0.9f, 0.9f)),
         Box.create(Vector.create(5f, 5f), Vector.create(7f, 7f)));
-    verifyEqualityAndApproximation(
-        Box.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
+    verifyEqualityAndApproximation(Box.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
         Box.create(Vector.create(0f, 0f, 0f), Vector.create(1f, 1f, 1f)),
         Box.create(Vector.create(0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f)),
         Box.create(Vector.create(5f, 5f, 5f), Vector.create(7f, 7f, 7f)));
-    verifyEqualityAndApproximation(
-        Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
+    verifyEqualityAndApproximation(Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
         Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(1f, 1f, 1f, 1f)),
         Box.create(Vector.create(0.1f, 0.1f, 0.1f, 0.1f), Vector.create(0.9f, 0.9f, 0.9f, 0.9f)),
         Box.create(Vector.create(5f, 5f, 5f, 5f), Vector.create(7f, 7f, 7f, 7f)));
@@ -137,6 +150,30 @@ public class BoxTest extends TestCase {
     assertTrue(a.intersects(bin));
     assertTrue(!a.intersects(bout));
     assertTrue(a.intersects(boverlap));
+  }
+
+  /**
+   * Boxes are capable of calculating their intersection and union bounds with
+   * other boxes.
+   */
+  public void testProvidesIntersectionsAndUnionsWithOtherBoxes() {
+    verifyIntersectionsAndUnions(Box.create(Vector.create(0f, 0f), Vector.create(2f, 2f)),
+        Box.create(Vector.create(1f, 1f), Vector.create(3f, 3f)),
+        Box.create(Vector.create(1f, 1f), Vector.create(2f, 2f)),
+        Box.create(Vector.create(0f, 0f), Vector.create(3f, 3f)));
+    verifyIntersectionsAndUnions(Box.create(Vector.create(0f, 0f, 0f), Vector.create(2f, 2f, 2f)),
+        Box.create(Vector.create(1f, 1f, 1f), Vector.create(3f, 3f, 3f)),
+        Box.create(Vector.create(1f, 1f, 1f), Vector.create(2f, 2f, 2f)),
+        Box.create(Vector.create(0f, 0f, 0f), Vector.create(3f, 3f, 3f)));
+    verifyIntersectionsAndUnions(Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(2f, 2f, 2f, 2f)),
+        Box.create(Vector.create(1f, 1f, 1f, 1f), Vector.create(3f, 3f, 3f, 3f)),
+        Box.create(Vector.create(1f, 1f, 1f, 1f), Vector.create(2f, 2f, 2f, 2f)),
+        Box.create(Vector.create(0f, 0f, 0f, 0f), Vector.create(3f, 3f, 3f, 3f)));
+  }
+
+  private void verifyIntersectionsAndUnions(Box a, Box b, Box intersection, Box union) {
+    assertEquals(a.intersection(b), intersection);
+    assertEquals(a.union(b), union);
   }
 
 }

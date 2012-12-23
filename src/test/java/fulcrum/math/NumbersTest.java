@@ -66,9 +66,12 @@ public class NumbersTest extends TestCase {
   /** Supports a number of utility functions for working with floats. */
   public void testProvidesCommonUtilityFunctions() {
     double min = 1.0, max = 2.0;
-    for (double data : TEST_DATA)
+    for (double data : TEST_DATA) {
+      assertEquals(data, Numbers.floor((float) data + 0.3f), 0.00001f);
+      assertEquals(data, Numbers.ceil((float) data - 0.3f), 0.00001f);
       assertEquals((float) Math.max(min, Math.min(data, max)), Numbers.clamp((float) data, (float) min, (float) max),
-          0.001f);
+          0.00001f);
+    }
   }
 
 }

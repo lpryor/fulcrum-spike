@@ -72,6 +72,24 @@ public final class Numbers {
     return (float) Math.toRadians(degrees);
   }
 
+  /**
+   * This method is supposedly a *lot* faster than using
+   * {@code (int)Math.floor(f)}.
+   */
+  public static int floor(float f) {
+    int i = (int) f;
+    return f < i ? i - 1 : i;
+  }
+
+  /**
+   * This method is supposedly a *lot* faster than using
+   * {@code (int)Math.ceil(f)}.
+   */
+  public static int ceil(float f) {
+    int i = (int) f;
+    return f > i ? i + 1 : i;
+  }
+
   /** Clamp function. */
   public static float clamp(float f, float min, float max) {
     return f < min ? min : f > max ? max : f;
