@@ -17,6 +17,7 @@ import java.util.TreeSet;
 import junit.framework.TestCase;
 import fulcrum.Function;
 import fulcrum.math.Box._2D;
+import fulcrum.util.Random;
 
 /**
  * Test case for {@link Quadtree}.
@@ -182,6 +183,27 @@ public class QuadtreeTest extends TestCase {
       assertTrue(tree.removeAll(list));
     }
     assertEquals(0, tree.size());
+  }
+
+  /**
+   * The quadtree implementation is capable of handling large numbers of
+   * entries.
+   */
+  public void testHandlesSetsWithManyEntries() {
+    int side = 32;
+    Map<String, Box._2D> map = new LinkedHashMap<String, Box._2D>(side * side);
+    Random random = new Random(0x12345678);
+    for (int x = 0; x < side; ++x) {
+      for (int y = 0; y < side; ++y) {
+        Vector._2D v = Vector.create(x * side + random.nextInteger(side - 2) + 1,
+            y * side + random.nextInteger(side - 2) + 1);
+        map.put(x + " x " + y, Box.create(v, v));
+      }
+    }
+    Quadtree<String> tree = new Quadtree<String>(Box.create(Vector.create(0f, 0f),
+        Vector.create(side * side, side * side)), new TestAdapter(map));
+    tree.addAll(map.keySet());
+    assertEquals(side * side, tree.size());
   }
 
   /** Verifies the results of a quadtree search. */
