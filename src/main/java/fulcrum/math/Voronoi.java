@@ -88,12 +88,28 @@ public final class Voronoi extends AbstractMap<Vector._2D, Polygon._2D> {
     float xmin = bounds.lower().value(X), ymin = bounds.lower().value(Y);
     float xmax = bounds.upper().value(X), ymax = bounds.upper().value(Y);
     for (Vector._2D site : fortune.sites()) {
-      xmin = Math.min(xmin, site.value(X) - 1f);
-      ymin = Math.min(ymin, site.value(Y) - 1f);
-      xmax = Math.max(xmax, site.value(X) + 1f);
-      ymax = Math.max(ymax, site.value(Y) + 1f);
+      xmin = Math.min(xmin, site.value(X));
+      ymin = Math.min(ymin, site.value(Y));
+      xmax = Math.max(xmax, site.value(X));
+      ymax = Math.max(ymax, site.value(Y));
     }
-    Box._2D diagram = Box.create(Vector.create(xmin, ymin), Vector.create(xmax, ymax));
+    for (Fortune.Edge edge : fortune.edges()) {
+      switch (edge.type()) {
+      case SEGMENT:
+        xmin = Math.min(xmin, edge.end().value(X));
+        ymin = Math.min(ymin, edge.end().value(Y));
+        xmax = Math.max(xmax, edge.end().value(X));
+        ymax = Math.max(ymax, edge.end().value(Y));
+      case RAY:
+        xmin = Math.min(xmin, edge.begin().value(X));
+        ymin = Math.min(ymin, edge.begin().value(Y));
+        xmax = Math.max(xmax, edge.begin().value(X));
+        ymax = Math.max(ymax, edge.begin().value(Y));
+        break;
+      default:
+      }
+    }
+    Box._2D diagram = Box.create(Vector.create(xmin - 2f, ymin - 2f), Vector.create(xmax + 2f, ymax + 2f));
     // Distribute the edges to the cells.
     HashMap<Vector._2D, Cell> cells = new HashMap<Vector._2D, Cell>(fortune.sites().size());
     for (Fortune.Edge edge : fortune.edges()) {
@@ -356,7 +372,7 @@ public final class Voronoi extends AbstractMap<Vector._2D, Polygon._2D> {
       } else if (right.location().value(X) < sx)
         return 1;
       else if (left.location().value(Y) < sy) {
-        if (right.left().value(Y) >= sy)
+        if (right.location().value(Y) >= sy)
           return -1;
       } else if (right.location().value(Y) < sy)
         return 1;

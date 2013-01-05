@@ -227,8 +227,9 @@ public final class Fortune {
         end = infinity(location, direction);
       } else {
         type = Type.SEGMENT;
-        direction = end.subtract(begin).normalize();
-        location = begin.add(direction.divide(2f));
+        Vector._2D tmp = end.subtract(begin);
+        direction = tmp.normalize();
+        location = begin.add(tmp.divide(2f));
       }
       if (left.value(X) > right.value(X) || left.value(X) == right.value(X) && left.value(Y) > right.value(Y))
         swap();

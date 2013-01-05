@@ -82,11 +82,11 @@ public class VoronoiTest extends TestCase {
         Vector.create(0f, 1f), //
         Vector.create(1f, 0f)));
     expected.put(Vector.create(1f, -1f), Polygon.create( //
+        Vector.create(2f, -2f), //
+        Vector.create(2f, 0f), //
         Vector.create(1f, 0f), //
         Vector.create(0f, -1f), //
-        Vector.create(0f, -2f), //
-        Vector.create(2f, -2f), //
-        Vector.create(2f, 0f)));
+        Vector.create(0f, -2f)));
     expected.put(Vector.create(-1f, -1f), Polygon.create( //
         Vector.create(-1f, 0f), //
         Vector.create(-2f, 0f), //
@@ -105,10 +105,10 @@ public class VoronoiTest extends TestCase {
     Box._2D bounds = Box.create(Vector.create(-3f, -2f), Vector.create(3f, 2f));
     Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
     expected.put(Vector.create(0f, 0f), Polygon.create( //
-        Vector.create(0.5f, 0.5f), //
         Vector.create(-0.5f, 0.5f), //
         Vector.create(-0.5f, -0.5f), //
-        Vector.create(0.5f, -0.5f)));
+        Vector.create(0.5f, -0.5f), //
+        Vector.create(0.5f, 0.5f)));
     expected.put(Vector.create(-1f, 0f), Polygon.create( //
         Vector.create(-0.5f, 0.5f), //
         Vector.create(-2f, 2f), //
@@ -117,12 +117,12 @@ public class VoronoiTest extends TestCase {
         Vector.create(-2f, -2f), //
         Vector.create(-0.5f, -0.5f)));
     expected.put(Vector.create(1f, 0f), Polygon.create( //
-        Vector.create(0.5f, 0.5f), //
-        Vector.create(0.5f, -0.5f), //
-        Vector.create(2f, -2f), //
         Vector.create(3f, -2f), //
         Vector.create(3f, 2f), //
-        Vector.create(2f, 2f)));
+        Vector.create(2f, 2f), //
+        Vector.create(0.5f, 0.5f), //
+        Vector.create(0.5f, -0.5f), //
+        Vector.create(2f, -2f)));
     expected.put(Vector.create(0f, -1f), Polygon.create( //
         Vector.create(-0.5f, -0.5f), //
         Vector.create(-2f, -2f), //
@@ -144,20 +144,20 @@ public class VoronoiTest extends TestCase {
     Box._2D bounds = Box.create(Vector.create(-2f, -2f), Vector.create(2f, 2f));
     Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
     expected.put(Vector.create(-1f, 0f), Polygon.create( //
+        Vector.create(-0.5f, -2f), //
         Vector.create(-0.5f, 2f), //
         Vector.create(-2f, 2f), //
-        Vector.create(-2f, -2f), //
-        Vector.create(-0.5f, -2f)));
+        Vector.create(-2f, -2f)));
     expected.put(Vector.create(0f, 0f), Polygon.create( //
+        Vector.create(0.5f, -2f), //
         Vector.create(0.5f, 2f), //
         Vector.create(-0.5f, 2f), //
-        Vector.create(-0.5f, -2f), //
-        Vector.create(0.5f, -2f)));
+        Vector.create(-0.5f, -2f)));
     expected.put(Vector.create(1f, 0f), Polygon.create( //
+        Vector.create(0.5f, 2f), //
         Vector.create(0.5f, -2f), //
         Vector.create(2f, -2f), //
-        Vector.create(2f, 2f), //
-        Vector.create(0.5f, 2f)));
+        Vector.create(2f, 2f)));
     verifyDiagram(expected, Voronoi.create(bounds, expected.keySet()), 0.000001f);
   }
 
@@ -169,20 +169,20 @@ public class VoronoiTest extends TestCase {
     Box._2D bounds = Box.create(Vector.create(-2f, -2f), Vector.create(2f, 2f));
     Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
     expected.put(Vector.create(0f, -1f), Polygon.create( //
-        Vector.create(-2f, -0.5f), //
-        Vector.create(-2f, -2f), //
         Vector.create(2f, -2f), //
-        Vector.create(2f, -0.5f)));
+        Vector.create(2f, -0.5f), //
+        Vector.create(-2f, -0.5f), //
+        Vector.create(-2f, -2f)));
     expected.put(Vector.create(0f, 1f), Polygon.create( //
-        Vector.create(2f, 0.5f), //
-        Vector.create(2f, 2f), //
         Vector.create(-2f, 2f), //
-        Vector.create(-2f, 0.5f)));
+        Vector.create(-2f, 0.5f), //
+        Vector.create(2f, 0.5f), //
+        Vector.create(2f, 2f)));
     expected.put(Vector.create(0f, 0f), Polygon.create( //
+        Vector.create(2f, 0.5f), //
         Vector.create(-2f, 0.5f), //
         Vector.create(-2f, -0.5f), //
-        Vector.create(2f, -0.5f), //
-        Vector.create(2f, 0.5f)));
+        Vector.create(2f, -0.5f)));
     verifyDiagram(expected, Voronoi.create(bounds, expected.keySet()), 0.000001f);
   }
 
@@ -202,7 +202,11 @@ public class VoronoiTest extends TestCase {
         Voronoi.create(Box.create(Vector.create(0f, 0f), Vector.create(side * side, side * side)), sites).size());
   }
 
-  public void testCropsDiagramsThatOverflowTheBoundingBox() {
+  /**
+   * The Vonoroi diagram implementation is capable of generating a diagram where
+   * sites fall outside the bounding box.
+   */
+  public void testCropsDiagramsWithSitesThatOverflowTheBoundingBox() {
     Box._2D bounds = Box.create(Vector.create(-1.75f, -1.75f), Vector.create(-0.25f, -0.25f));
     Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
     expected.put(Vector.create(-1f, -1f), Polygon.create( //
@@ -221,6 +225,36 @@ public class VoronoiTest extends TestCase {
     verifyDiagram(expected, v, 0.000001f);
   }
 
+  /**
+   * The Vonoroi diagram implementation is capable of generating a diagram where
+   * vertices fall outside the bounding box.
+   */
+  public void testGeneratesDiagramsWithVerticesThatOverflowTheBoundingBox() {
+    Box._2D bounds = Box.create(Vector.create(0f, 0f), Vector.create(512f, 128f));
+    Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
+    expected.put(Vector.create(40f, 80f), Polygon.create( //
+        Vector.create(0f, 128f), //
+        Vector.create(0f, 0f), //
+        Vector.create(98.020294f, 0f), //
+        Vector.create(130.23798f, 128f)));
+    expected.put(Vector.create(187f, 43f), Polygon.create( //
+        Vector.create(130.23798f, 128f), //
+        Vector.create(98.020294f, 0f), //
+        Vector.create(274.37796f, 0f), //
+        Vector.create(244.77242f, 128f)));
+    expected.put(Vector.create(334f, 77f), Polygon.create( //
+        Vector.create(384.69498f, 0f), //
+        Vector.create(399.8814f, 128f), //
+        Vector.create(244.77242f, 128f), //
+        Vector.create(274.37796f, 0f)));
+    expected.put(Vector.create(452f, 63f), Polygon.create( //
+        Vector.create(512f, 0f), //
+        Vector.create(512f, 128f), //
+        Vector.create(399.8814f, 128f), //
+        Vector.create(384.69498f, 0f)));
+    verifyDiagram(expected, Voronoi.create(bounds, expected.keySet()), 0.001f);
+  }
+
   /** Verifies the shape of all the cells in a diagram. */
   private void verifyDiagram(Map<Vector._2D, Polygon._2D> expected, Voronoi actual, float delta) {
     assertEquals(expected.keySet(), actual.keySet());
@@ -228,7 +262,7 @@ public class VoronoiTest extends TestCase {
       Polygon._2D e = cell.getValue(), a = actual.get(cell.getKey());
       assertEquals(e.vertices(), a.vertices());
       for (int i = 0; i < e.vertices(); ++i)
-        assertTrue(e.vertex(i).equalTo(a.vertex(i), delta));
+        assertTrue(e + " != " + a, e.vertex(i).equalTo(a.vertex(i), delta));
     }
   }
 
