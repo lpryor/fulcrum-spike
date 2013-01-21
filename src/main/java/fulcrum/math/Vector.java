@@ -432,7 +432,6 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
     /* @see Vector#divide(float) */
     @Override
     public _2D divide(float scalar) {
-      assert scalar != 0f;
       return create(value0 / scalar, value1 / scalar);
     }
 
@@ -457,8 +456,6 @@ public abstract class Vector implements Cloneable, Comparable<Vector> {
     /* @see Vector#divide(Vector) */
     @Override
     public _2D divide(Vector that) {
-      assert that.value(0) != 0f;
-      assert that.value(1) != 0f;
       return create(value0 / that.value(0), value1 / that.value(1));
     }
 

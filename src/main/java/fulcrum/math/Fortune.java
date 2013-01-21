@@ -100,6 +100,10 @@ public final class Fortune {
     this.sites = sites;
     this.edges = edges;
     this.triangles = triangles;
+    for (Edge edge : edges) {
+      if (edge.type == Edge.Type.SEGMENT)
+        System.out.println(edge.begin().distance(edge.end()));
+    }
   }
 
   /** Returns the sites provided as input to the algorithm. */
@@ -370,10 +374,6 @@ public final class Fortune {
       else
         parent.replace(parabola, node);
       flush(event.location().value(Y));
-      for (Event.Circle circle : circles.values())
-        if (event.location().distance(circle.circumcenter()) < circle.location().value(Y)
-            - circle.circumcenter().value(Y))
-          circle.invalidate();
     }
 
     /**

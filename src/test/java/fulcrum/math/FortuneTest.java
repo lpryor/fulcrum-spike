@@ -19,6 +19,7 @@ package fulcrum.math;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
 import fulcrum.util.Random;
 
@@ -54,6 +55,25 @@ public class FortuneTest extends TestCase {
     assertEquals(1, f.edges().size());
     verifyEdge(f.edges().iterator().next());
     assertTrue(f.triangles().isEmpty());
+  }
+
+  /**
+   * The Fortune's algorithm implementation is capable of generating a diagram
+   * from three sites organically distributed in a plane.
+   */
+  public void testGeneratesEdgesFromThreeSites() {
+    Vector._2D a = Vector.create(78f, 77f), b = Vector.create(156f, 102f), c = Vector.create(196f, 63f);
+    Fortune f = Fortune.create(a, b, c);
+    assertEquals(3, f.sites().size());
+    assertTrue(f.sites().contains(a));
+    assertTrue(f.sites().contains(b));
+    assertTrue(f.sites().contains(c));
+    assertEquals(3, f.edges().size());
+    Iterator<Fortune.Edge> iter = f.edges().iterator();
+    verifyEdge(iter.next());
+    verifyEdge(iter.next());
+    verifyEdge(iter.next());
+    assertEquals(1, f.triangles().size());
   }
 
   /**

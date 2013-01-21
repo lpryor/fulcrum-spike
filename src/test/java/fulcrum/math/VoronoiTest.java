@@ -57,6 +57,33 @@ public class VoronoiTest extends TestCase {
   }
 
   /**
+   * The Vonoroi diagram implementation is capable of generating a diagram from
+   * three sites organically distributed in a plane.
+   */
+  public void testGeneratesDiagramsWithThreeSites() {
+    Box._2D bounds = Box.create(Vector.create(0f, 0f), Vector.create(256f, 128f));
+    Map<Vector._2D, Polygon._2D> expected = new LinkedHashMap<Vector._2D, Polygon._2D>();
+    Vector._2D a = Vector.create(78f, 77f), b = Vector.create(156f, 102f), c = Vector.create(196f, 63f);
+    expected.put(a, Polygon.create( //
+        Vector.create(104.6602f, 128f), //
+        Vector.create(0f, 128f), //
+        Vector.create(0f, 0f), //
+        Vector.create(128.6949f, 0f), //
+        Vector.create(133.2852f, 38.6900f)));
+    expected.put(b, Polygon.create( //
+        Vector.create(220.3625f, 128f), //
+        Vector.create(104.6602f, 128f), //
+        Vector.create(133.2852f, 38.6900f)));
+    expected.put(c, Polygon.create( //
+        Vector.create(128.6949f, 0f), //
+        Vector.create(256f, 0f), //
+        Vector.create(256f, 128f), //
+        Vector.create(220.3625f, 128f), //
+        Vector.create(133.2852f, 38.6900f)));
+    verifyDiagram(expected, Voronoi.create(bounds, expected.keySet()), 0.001f);
+  }
+
+  /**
    * The Vonoroi diagram implementation is capable of generating a diagram with
    * a diamond-shaped polygon at the origin and four pentagons on its diagonal
    * edges.
