@@ -834,22 +834,22 @@ public abstract class GLContext {
   public abstract int getAttribLocation(int program, String name);
 
   /** Return parameters of a buffer object. */
-  public abstract int getBufferParameteriv(int target, int value);
+  public abstract int[] getBufferParameteriv(int target, int value);
 
   /** Return error information. */
   public abstract int getError();
 
   /** Return attachment parameters of a framebuffer object. */
-  public abstract int getFramebufferAttachmentParameteriv(int target, int attachment, int pname);
+  public abstract int[] getFramebufferAttachmentParameteriv(int target, int attachment, int pname);
 
   /** Return the information log for a program object. */
   public abstract String getProgramInfoLog(int program);
 
   /** Return a parameter from a program object. */
-  public abstract int getProgramiv(int program, int pname);
+  public abstract int[] getProgramiv(int program, int pname);
 
   /** Return parameters of a renderbuffer object. */
-  public abstract int getRenderbufferParameteriv(int target, int pname);
+  public abstract int[] getRenderbufferParameteriv(int target, int pname);
 
   /** Return the information log for a shader object. */
   public abstract String getShaderInfoLog(int shader);
@@ -861,16 +861,16 @@ public abstract class GLContext {
   public abstract String getShaderSource(int shader);
 
   /** Return a parameter from a shader object. */
-  public abstract int getShaderiv(int shader, int pname);
+  public abstract int[] getShaderiv(int shader, int pname);
 
   /** Return a string describing the current GL connection. */
   public abstract String getString(int name);
 
   /** Return texture parameter values. */
-  public abstract float getTexParameterfv(int target, int pname);
+  public abstract float[] getTexParameterfv(int target, int pname);
 
   /** Return texture parameter values. */
-  public abstract int getTexParameteriv(int target, int pname);
+  public abstract int[] getTexParameteriv(int target, int pname);
 
   /** Return the value of a uniform variable. */
   public abstract void getUniformfv(int program, int location, GLFloats params);
@@ -1018,37 +1018,37 @@ public abstract class GLContext {
   public abstract void uniform4i(int location, int v0, int v1, int v2, int v3);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform1fv(int location, int count, GLFloats value);
+  public abstract void uniform1fv(int location, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform2fv(int location, int count, GLFloats value);
+  public abstract void uniform2fv(int location, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform3fv(int location, int count, GLFloats value);
+  public abstract void uniform3fv(int location, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform4fv(int location, int count, GLFloats value);
+  public abstract void uniform4fv(int location, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform1iv(int location, int count, GLIntegers value);
+  public abstract void uniform1iv(int location, GLIntegers value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform2iv(int location, int count, GLIntegers value);
+  public abstract void uniform2iv(int location, GLIntegers value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform3iv(int location, int count, GLIntegers value);
+  public abstract void uniform3iv(int location, GLIntegers value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniform4iv(int location, int count, GLIntegers value);
+  public abstract void uniform4iv(int location, GLIntegers value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniformMatrix2fv(int location, int count, boolean transpose, GLFloats value);
+  public abstract void uniformMatrix2fv(int location, boolean transpose, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniformMatrix3fv(int location, int count, boolean transpose, GLFloats value);
+  public abstract void uniformMatrix3fv(int location, boolean transpose, GLFloats value);
 
   /** Specify the value of a uniform variable for the current program object. */
-  public abstract void uniformMatrix4fv(int location, int count, boolean transpose, GLFloats value);
+  public abstract void uniformMatrix4fv(int location, boolean transpose, GLFloats value);
 
   /** Install a program object as part of current rendering state. */
   public abstract void useProgram(int program);
@@ -1084,8 +1084,19 @@ public abstract class GLContext {
   public abstract void vertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int offset);
 
   /** Define an array of generic vertex attribute data. */
-  public abstract void vertexAttribPointer(int index, int size, int type, boolean normalized, int stride,
+  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
       GLBytes pointer);
+
+  /** Define an array of generic vertex attribute data. */
+  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
+      GLShorts pointer);
+
+  /** Define an array of generic vertex attribute data. */
+  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
+      GLIntegers pointer);
+
+  /** Define an array of generic vertex attribute data. */
+  public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, GLFloats pointer);
 
   /** Set the viewport. */
   public abstract void viewport(int x, int y, int width, int height);
