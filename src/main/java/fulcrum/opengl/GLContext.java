@@ -1084,15 +1084,15 @@ public abstract class GLContext {
   public abstract void vertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int offset);
 
   /** Define an array of generic vertex attribute data. */
-  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
+  public abstract void vertexAttribPointer(int index, int size, boolean isUnsigned, boolean normalized, int stride,
       GLBytes pointer);
 
   /** Define an array of generic vertex attribute data. */
-  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
+  public abstract void vertexAttribPointer(int index, int size, boolean isUnsigned, boolean normalized, int stride,
       GLShorts pointer);
 
   /** Define an array of generic vertex attribute data. */
-  public abstract void vertexAttribPointer(int index, int size, boolean unsigned, boolean normalized, int stride,
+  public abstract void vertexAttribPointer(int index, int size, boolean isUnsigned, boolean normalized, int stride,
       GLIntegers pointer);
 
   /** Define an array of generic vertex attribute data. */
