@@ -119,6 +119,8 @@
 		<exec executable="${j2objc.dir}/j2objc" failonerror="true">
 			<arg value="--prefixes" />
 			<arg value="prefixes.properties" />
+			<arg value="-classpath" />
+			<arg value="${out.main.java}" />
 			<arg value="-d" />
 			<arg value="${gen.main.objc}" />
 			<arg value="-sourcepath" />
@@ -136,16 +138,20 @@
 		<exec executable="${j2objc.dir}/j2objc" failonerror="true">
 			<arg value="--prefixes" />
 			<arg value="prefixes.properties" />
+			<arg value="-classpath" />
+			<arg value="${out.main.java}:${out.ios.java}" />
 			<arg value="-d" />
 			<arg value="${gen.ios.objc}" />
 			<arg value="-sourcepath" />
-			<arg value="${src.main.java}:${src.ios.java}" />
+			<arg value="${src.ios.java}" />
 			<arg line="${ios.files}" />
 		</exec>
 		<!-- Collect the list of test java files to convert. -->
 		<fileset id="test.fileset" dir="${src.test.java}">
 			<include name="**/*.java" />
 			<exclude name="Tests.java" />
+			<exclude name="**/desktop/**" />
+			<exclude name="**/android/**" />
 		</fileset>
 		<pathconvert property="test.files" refid="test.fileset"
 			pathsep=" " />
@@ -156,22 +162,22 @@
 			<arg value="prefixes.properties" />
 			<arg value="--no-generate-test-main" />
 			<arg value="-classpath" />
-			<arg value="${junit.jar}" />
+			<arg value="${out.main.java}:${out.ios.java}:${out.test.java}:${junit.jar}" />
 			<arg value="-d" />
 			<arg value="${gen.test.objc}" />
 			<arg value="-sourcepath" />
-			<arg value="${src.main.java}:${src.ios.java}:${src.test.java}" />
+			<arg value="${src.test.java}" />
 			<arg line="${test.files}" />
 		</exec>
 		<exec executable="${j2objc.dir}/j2objc" failonerror="true">
 			<arg value="--prefixes" />
 			<arg value="prefixes.properties" />
 			<arg value="-classpath" />
-			<arg value="${junit.jar}" />
+			<arg value="${out.main.java}:${out.ios.java}:${out.test.java}:${junit.jar}" />
 			<arg value="-d" />
 			<arg value="${gen.test.objc}" />
 			<arg value="-sourcepath" />
-			<arg value="${src.main.java}:${src.ios.java}:${src.test.java}" />
+			<arg value="${src.test.java}" />
 			<arg value="Tests.java" />
 		</exec>
 		<!-- Edit the generated main test class in Objective-C to remove an extra 
@@ -187,6 +193,7 @@
 			pathsep=" " />
 		<fileset id="ios.objc.fileset" dir="${gen.ios.objc}">
 			<include name="**/*.m" />
+			<exclude name="**/*IOSGLContext*" />
 		</fileset>
 		<pathconvert property="ios.objc.files" refid="ios.objc.fileset"
 			pathsep=" " />
@@ -223,7 +230,7 @@
 				<path location="${junit.jar}" />
 			</classpath>
 			<batchtest>
-				<fileset dir="${out.test.java}" includes="**/*Test.class" />
+				<fileset dir="${out.test.java}" includes="**/*Test.class" excludes="**/ios/**" />
 			</batchtest>
 		</junit>
 		<!-- Run the Objective-C test cases. -->

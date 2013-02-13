@@ -49,7 +49,7 @@ final class IOSGLIntegers extends GLIntegers {
   }
 
   /** Acquires the appropriate range in the underlying buffer. */
-  int pointer() {
+  long pointer() {
     return buffer.integerPointer(beginIndex);
   }
 
@@ -82,8 +82,7 @@ final class IOSGLIntegers extends GLIntegers {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      array[offset + i] = buffer.integerValue(beginIndex + i);
+    buffer.integerValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLIntegers#copyFrom(int[], int) */
@@ -93,8 +92,7 @@ final class IOSGLIntegers extends GLIntegers {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      buffer.setIntegerValue(beginIndex + i, array[offset + i]);
+    buffer.setIntegerValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLIntegers#subData(int, int) */

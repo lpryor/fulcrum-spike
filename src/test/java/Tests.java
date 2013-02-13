@@ -48,13 +48,21 @@ public class Tests extends TestSuite {
         //
         // fulcrum.noise
         //
-        fulcrum.noise.OctavesTest.class,
+        fulcrum.noise.OctavesTest.class, //
         fulcrum.noise.SimplexTest.class, //
 
         //
         // fulcrum.util
         //
-        fulcrum.util.RandomTest.class //
+        fulcrum.util.RandomTest.class, //
+
+        //
+        // fulcrum.ios.opengl
+        //
+        fulcrum.ios.opengl.IOSGLBytesTest.class, //
+        fulcrum.ios.opengl.IOSGLShortsTest.class, //
+        fulcrum.ios.opengl.IOSGLIntegersTest.class, //
+        fulcrum.ios.opengl.IOSGLFloatsTest.class //
 
         });
   }

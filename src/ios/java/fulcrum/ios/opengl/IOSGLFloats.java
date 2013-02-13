@@ -49,7 +49,7 @@ final class IOSGLFloats extends GLFloats {
   }
 
   /** Acquires the appropriate range in the underlying buffer. */
-  int pointer() {
+  long pointer() {
     return buffer.floatPointer(beginIndex);
   }
 
@@ -82,8 +82,7 @@ final class IOSGLFloats extends GLFloats {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      array[offset + i] = buffer.floatValue(beginIndex + i);
+    buffer.floatValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLFloats#copyFrom(float[], int) */
@@ -93,8 +92,7 @@ final class IOSGLFloats extends GLFloats {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      buffer.setFloatValue(beginIndex + i, array[offset + i]);
+    buffer.setFloatValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLFloats#subData(int, int) */

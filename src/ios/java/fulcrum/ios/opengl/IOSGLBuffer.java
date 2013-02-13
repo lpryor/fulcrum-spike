@@ -19,10 +19,6 @@ package fulcrum.ios.opengl;
 
 import fulcrum.text.Strings;
 
-/*-[
- #include "ES2/gl.h"
- ]-*/
-
 /**
  * A wrapper around an iOS memory buffer.
  * 
@@ -31,19 +27,19 @@ import fulcrum.text.Strings;
 final class IOSGLBuffer {
 
   /** Allocates memory for use in the OpenGL layer. */
-  private static native int calloc(int size)
+  private static native long calloc(int size)
   /*-[
-    return (int) (calloc(size, sizeof(GLbyte)));
+    return (long long int)(calloc(size, sizeof(char)));
   ]-*/;
 
   /** Deallocates memory used in the OpenGL layer. */
-  private static native void free(int pointer)
+  private static native void free(long pointer)
   /*-[
       free((void*)pointer);
   ]-*/;
 
   /** The pointer to the buffer. */
-  private final int pointer;
+  private final long pointer;
 
   /** Creates a new IOSGLPointer. */
   IOSGLBuffer(int size) {
@@ -53,93 +49,129 @@ final class IOSGLBuffer {
   }
 
   /** Returns a pointer to a byte in the buffer. */
-  native int bytePointer(int offset)
+  native long bytePointer(int offset)
   /*-[
-  return (int)(((GLbyte*)self.pointer) + offset);
+  return (long long int)(((char*)self.pointer) + offset);
   ]-*/;
 
   /** Returns a pointer to a short in the buffer. */
-  native int shortPointer(int offset)
+  native long shortPointer(int offset)
   /*-[
-  return (int)(((GLshort*)self.pointer) + offset);
+  return (long long int)(((short*)self.pointer) + offset);
   ]-*/;
 
   /** Returns a pointer to an integer in the buffer. */
-  native int integerPointer(int offset)
+  native long integerPointer(int offset)
   /*-[
-  return (int)(((GLint*)self.pointer) + offset);
+  return (long long int)(((int*)self.pointer) + offset);
   ]-*/;
 
   /** Returns a pointer to a float in the buffer. */
-  native int floatPointer(int offset)
+  native long floatPointer(int offset)
   /*-[
-  return (int)(((GLfloat*)self.pointer) + offset);
+  return (long long int)(((float*)self.pointer) + offset);
   ]-*/;
 
   /** Returns the value of a byte in the buffer. */
   native byte byteValue(int offset)
   /*-[
-  return ((GLbyte*)self.pointer)[offset];
+  return *(((char*)self.pointer) + offset);
   ]-*/;
 
   /** Returns the value of a short in the buffer. */
   native short shortValue(int offset)
   /*-[
-  return ((GLshort*)self.pointer)[offset];
+  return *(((short*)self.pointer) + offset);
   ]-*/;
 
   /** Returns the value of an integer in the buffer. */
   native int integerValue(int offset)
   /*-[
-  return ((GLint*)self.pointer)[offset];
+  return *(((int*)self.pointer) + offset);
   ]-*/;
 
   /** Returns the value of a float in the buffer. */
   native float floatValue(int offset)
   /*-[
-  return ((GLfloat*)self.pointer)[offset];
+  return *(((float*)self.pointer) + offset);
   ]-*/;
 
   /** Returns the value of bytes in the buffer. */
   native void byteValues(int offset, int count, byte[] values, int index)
   /*-[
-  [values getBytes:(((char*)self.pointer) + offset) offset:index length:count];
+  [values replaceBytes:(((char*)self.pointer) + offset) length:count offset:index];
   ]-*/;
+
+  /** Returns the value of shorts in the buffer. */
+  void shortValues(int offset, int count, short[] values, int index) {
+    for (int i = 0; i < count; ++i)
+      values[index + i] = shortValue(offset + i);
+  }
+
+  /** Returns the value of integers in the buffer. */
+  void integerValues(int offset, int count, int[] values, int index) {
+    for (int i = 0; i < count; ++i)
+      values[index + i] = integerValue(offset + i);
+  }
+
+  /** Returns the value of floats in the buffer. */
+  void floatValues(int offset, int count, float[] values, int index) {
+    for (int i = 0; i < count; ++i)
+      values[index + i] = floatValue(offset + i);
+  }
 
   /** Sets the value of a byte in the buffer. */
   native void setByteValue(int offset, byte value)
   /*-[
-  ((GLbyte*)self.pointer)[offset] = value;
+  *(((char*)self.pointer) + offset) = value;
   ]-*/;
 
   /** Sets the value of a short in the buffer. */
   native void setShortValue(int offset, short value)
   /*-[
-  ((GLshort*)self.pointer)[offset] = value;
+  *(((short*)self.pointer) + offset) = value;
   ]-*/;
 
   /** Sets the value of an integer in the buffer. */
   native void setIntegerValue(int offset, int value)
   /*-[
-  ((GLint*)self.pointer)[offset] = value;
+  *(((int*)self.pointer) + offset) = value;
   ]-*/;
 
   /** Sets the value of a float in the buffer. */
   native void setFloatValue(int offset, float value)
   /*-[
-  ((GLfloat*)self.pointer)[offset] = value;
+  *(((float*)self.pointer) + offset) = value;
   ]-*/;
 
   /** Sets the values of bytes in the buffer. */
   native void setByteValues(int offset, int count, byte[] values, int index)
   /*-[
-  [values replaceBytes:(((char*)self.pointer) + offset) length:count offset:index];
+  [values getBytes:(((char*)self.pointer) + offset) offset:index length:count];
   ]-*/;
+
+  /** Sets the values of shorts in the buffer. */
+  void setShortValues(int offset, int count, short[] values, int index) {
+    for (int i = 0, size = count; i < size; ++i)
+      setShortValue(offset + i, values[index + i]);
+  }
+
+  /** Sets the values of integers in the buffer. */
+  void setIntegerValues(int offset, int count, int[] values, int index) {
+    for (int i = 0, size = count; i < size; ++i)
+      setIntegerValue(offset + i, values[index + i]);
+  }
+
+  /** Sets the values of floats in the buffer. */
+  void setFloatValues(int offset, int count, float[] values, int index) {
+    for (int i = 0, size = count; i < size; ++i)
+      setFloatValue(offset + i, values[index + i]);
+  }
 
   /* @see Object#finalize() */
   @Override
   protected void finalize() throws Throwable {
-    int pointer = this.pointer;
+    long pointer = this.pointer;
     super.finalize();
     free(pointer);
   }

@@ -49,7 +49,7 @@ final class IOSGLShorts extends GLShorts {
   }
 
   /** Acquires the appropriate range in the underlying buffer. */
-  int pointer() {
+  long pointer() {
     return buffer.shortPointer(beginIndex);
   }
 
@@ -82,8 +82,7 @@ final class IOSGLShorts extends GLShorts {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      array[offset + i] = buffer.shortValue(beginIndex + i);
+    buffer.shortValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLShorts#copyFrom(short[], int) */
@@ -93,8 +92,7 @@ final class IOSGLShorts extends GLShorts {
     assert offset >= 0;
     assert offset <= array.length;
     assert array.length - offset >= size();
-    for (int i = 0, size = size(); i < size; ++i)
-      buffer.setShortValue(beginIndex + i, array[offset + i]);
+    buffer.setShortValues(beginIndex, size(), array, offset);
   }
 
   /* @see GLShorts#subData(int, int) */

@@ -51,7 +51,7 @@ final class IOSGLBytes extends GLBytes {
   }
 
   /** Acquires the appropriate range in the underlying buffer. */
-  int pointer() {
+  long pointer() {
     return buffer.bytePointer(beginIndex);
   }
 
