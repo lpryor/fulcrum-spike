@@ -192,7 +192,7 @@ public class QuadtreeTest extends TestCase {
   public void testHandlesSetsWithManyEntries() {
     int side = 32;
     Map<String, Box._2D> map = new LinkedHashMap<String, Box._2D>(side * side);
-    Random random = new Random(0x12345678);
+    Random random = Random.apply(0x12345678);
     for (int x = 0; x < side; ++x) {
       for (int y = 0; y < side; ++y) {
         Vector._2D v = Vector.create(x * side + random.nextInteger(side - 2) + 1,

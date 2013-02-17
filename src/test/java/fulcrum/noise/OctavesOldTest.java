@@ -20,11 +20,11 @@ package fulcrum.noise;
 import junit.framework.TestCase;
 
 /**
- * Test case for {@link Octaves}.
+ * Test case for {@link OctavesOld}.
  * 
  * @author Lonnie Pryor III (lonnie@pryor.us.com)
  */
-public class OctavesTest extends TestCase {
+public class OctavesOldTest extends TestCase {
 
   /**
    * Octaves generates noise by combining the output of multiple other noise
@@ -32,11 +32,11 @@ public class OctavesTest extends TestCase {
    */
   public void testCombinesMultipleNoiseSources() {
     MockNoise low = new MockNoise(1f / 4), high = new MockNoise(3f / 4f);
-    Octaves._2D o2 = Octaves.create(1f / 2f, (Noise._2D) low, high);
+    OctavesOld._2D o2 = OctavesOld.create(1f / 2f, (NoiseOld._2D) low, high);
     assertEquals(0.4166f, o2.sample(0f, 0f), 0.001f);
-    Octaves._3D o3 = Octaves.create(1f / 2f, (Noise._3D) low, high);
+    OctavesOld._3D o3 = OctavesOld.create(1f / 2f, (NoiseOld._3D) low, high);
     assertEquals(0.4166f, o3.sample(0f, 0f, 0f), 0.001f);
-    Octaves._4D o4 = Octaves.create(1f / 2f, (Noise._4D) low, high);
+    OctavesOld._4D o4 = OctavesOld.create(1f / 2f, (NoiseOld._4D) low, high);
     assertEquals(0.4166f, o4.sample(0f, 0f, 0f, 0f), 0.001f);
   }
 
@@ -45,7 +45,7 @@ public class OctavesTest extends TestCase {
    * 
    * @author Lonnie Pryor III (lonnie@pryor.us.com)
    */
-  private static class MockNoise implements Noise._2D, Noise._3D, Noise._4D {
+  private static class MockNoise implements NoiseOld._2D, NoiseOld._3D, NoiseOld._4D {
 
     /** The value to return. */
     final float value;

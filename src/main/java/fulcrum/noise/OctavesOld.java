@@ -24,28 +24,28 @@ import fulcrum.math.Numbers;
  * 
  * @author Lonnie Pryor III
  */
-public abstract class Octaves implements Noise, Cloneable {
+public abstract class OctavesOld implements NoiseOld, Cloneable {
 
   /** Creates a new two-dimensional multi-octave noise generator. */
-  public static Octaves._2D create(float persistence, Noise._2D... octaves) {
-    return new Octaves._2D(persistence, octaves);
+  public static OctavesOld._2D create(float persistence, NoiseOld._2D... octaves) {
+    return new OctavesOld._2D(persistence, octaves);
   }
 
   /** Creates a new three-dimensional multi-octave noise generator. */
-  public static Octaves._3D create(float persistence, Noise._3D... octaves) {
-    return new Octaves._3D(persistence, octaves);
+  public static OctavesOld._3D create(float persistence, NoiseOld._3D... octaves) {
+    return new OctavesOld._3D(persistence, octaves);
   }
 
   /** Creates a new four-dimensional multi-octave noise generator. */
-  public static Octaves._4D create(float persistence, Noise._4D... octaves) {
-    return new Octaves._4D(persistence, octaves);
+  public static OctavesOld._4D create(float persistence, NoiseOld._4D... octaves) {
+    return new OctavesOld._4D(persistence, octaves);
   }
 
   /** The persistence of component samples. */
   protected final float persistence;
 
   /** Creates a new multi-octave noise generator. */
-  private Octaves(float persistence) {
+  private OctavesOld(float persistence) {
     this.persistence = persistence;
   }
 
@@ -54,13 +54,13 @@ public abstract class Octaves implements Noise, Cloneable {
    * 
    * @author Lonnie Pryor III
    */
-  public static final class _2D extends Octaves implements Noise._2D {
+  public static final class _2D extends OctavesOld implements NoiseOld._2D {
 
     /** The octaves that are merged together. */
-    private final Noise._2D[] octaves;
+    private final NoiseOld._2D[] octaves;
 
     /** Creates a new two-dimensional multi-octave noise generator. */
-    public _2D(float persistence, Noise._2D... octaves) {
+    public _2D(float persistence, NoiseOld._2D... octaves) {
       super(persistence);
       assert octaves != null;
       if (octaves.length == 0)
@@ -87,13 +87,13 @@ public abstract class Octaves implements Noise, Cloneable {
    * 
    * @author Lonnie Pryor III
    */
-  public static final class _3D extends Octaves implements Noise._3D {
+  public static final class _3D extends OctavesOld implements NoiseOld._3D {
 
     /** The octaves that are merged together. */
-    private final Noise._3D[] octaves;
+    private final NoiseOld._3D[] octaves;
 
     /** Creates a new three-dimensional multi-octave noise generator. */
-    public _3D(float persistence, Noise._3D... octaves) {
+    public _3D(float persistence, NoiseOld._3D... octaves) {
       super(persistence);
       assert octaves != null;
       if (octaves.length == 0)
@@ -120,13 +120,13 @@ public abstract class Octaves implements Noise, Cloneable {
    * 
    * @author Lonnie Pryor III
    */
-  public static final class _4D extends Octaves implements Noise._4D {
+  public static final class _4D extends OctavesOld implements NoiseOld._4D {
 
     /** The octaves that are merged together. */
-    private final Noise._4D[] octaves;
+    private final NoiseOld._4D[] octaves;
 
     /** Creates a new four-dimensional multi-octave noise generator. */
-    public _4D(float persistence, Noise._4D... octaves) {
+    public _4D(float persistence, NoiseOld._4D... octaves) {
       super(persistence);
       assert octaves != null;
       if (octaves.length == 0)

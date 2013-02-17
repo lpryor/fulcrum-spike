@@ -38,7 +38,7 @@ import fulcrum.util.Random;
  * 
  * @author Lonnie Pryor III (lonnie@pryor.us.com)
  */
-public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable {
+public final class Simplex implements NoiseOld._2D, NoiseOld._3D, NoiseOld._4D, Cloneable {
 
   /** The 3D gradient table. */
   private static final Gradient[] GRADIENT_3D = { new Gradient(1, 1, 0), new Gradient(-1, 1, 0),
@@ -78,7 +78,7 @@ public final class Simplex implements Noise._2D, Noise._3D, Noise._4D, Cloneable
     short p[] = new short[permutations.length / 2];
     for (int i = 0; i < p.length; ++i)
       p[i] = (short) i;
-    Random rng = new Random(seed);
+    Random rng = Random.apply(seed);
     for (int i = p.length - 1; i >= 0; --i) {
       int j = rng.nextInteger(i + 1);
       short tmp = p[j];

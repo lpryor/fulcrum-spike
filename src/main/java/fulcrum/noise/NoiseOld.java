@@ -23,14 +23,14 @@ package fulcrum.noise;
  * 
  * @author Lonnie Pryor III
  */
-public interface Noise {
+public interface NoiseOld {
 
   /**
    * A two-dimensional noise generator.
    * 
    * @author Lonnie Pryor III
    */
-  interface _2D extends Noise {
+  interface _2D extends NoiseOld {
 
     /** Returns a sample in the range [-1, 1] for the specified coordinates. */
     float sample(float x, float y);
@@ -42,7 +42,7 @@ public interface Noise {
    * 
    * @author Lonnie Pryor III
    */
-  interface _3D extends Noise {
+  interface _3D extends NoiseOld {
 
     /** Returns a sample in the range [-1, 1] for the specified coordinates. */
     float sample(float x, float y, float z);
@@ -54,7 +54,7 @@ public interface Noise {
    * 
    * @author Lonnie Pryor III
    */
-  interface _4D extends Noise {
+  interface _4D extends NoiseOld {
 
     /** Returns a sample in the range [-1, 1] for the specified coordinates. */
     float sample(float x, float y, float z, float w);
