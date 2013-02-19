@@ -76,7 +76,7 @@ final class Random private (seed: Int) {
   def nextBoolean(): Boolean = (next() >>> 31) != 0
 
   /** Returns the next byte value. */
-  def nextByte(): Byte = (next() >>> 24) toByte
+  def nextByte(): Byte = (next() >>> 24).toByte
 
   /** Returns the next integer value. */
   def nextInteger(): Int = next()
@@ -85,7 +85,7 @@ final class Random private (seed: Int) {
   def nextInteger(toValue: Int): Int = {
     require(toValue > 0, "toValue must be greater than zero")
     if ((toValue & -toValue) == toValue)
-      (toValue * (next() >>> 1 toLong)) >> 31 toInt
+      ((toValue * ((next() >>> 1).toLong)) >> 31).toInt
     else {
       var bits, result = 0
       do {
@@ -97,7 +97,7 @@ final class Random private (seed: Int) {
   }
 
   /** Returns the next value in {@code [0, 1)}. */
-  def nextFloat(): Float = (next() >>> 8) / (1 << 24 toFloat)
+  def nextFloat(): Float = (next() >>> 8) / (1 << 24).toFloat
 
   /** Produces the next pseudo-random 32-bit number. */
   private def next() = {
@@ -156,7 +156,7 @@ object Random {
   /** Creates a RNG from a time-based seed. */
   def apply(): Random = {
     val s = System.currentTimeMillis ^ System.nanoTime
-    apply(s & 0x00000000FFFFFFFFL ^ s >>> 32 toInt)
+    apply((s & 0x00000000FFFFFFFFL ^ s >>> 32).toInt)
   }
 
   /** Creates a RNG from the specified seed. */

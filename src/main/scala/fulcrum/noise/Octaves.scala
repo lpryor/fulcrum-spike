@@ -17,7 +17,7 @@
  */
 package fulcrum.noise
 
-import fulcrum.math.Numbers
+import fulcrum.math._
 
 /**
  * A factory for noise generators that merge the samples from other generators.
@@ -28,20 +28,20 @@ object Octaves {
 
   /** Creates a new two-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise2*): Noise2 = {
-    require(octaves nonEmpty, "octaves must not be empty")
-    new Octaves2(persistence, octaves toList)
+    require(octaves.nonEmpty, "octaves must not be empty")
+    new Octaves2(persistence, octaves.toList)
   }
 
   /** Creates a new three-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise3*): Noise3 = {
-    require(octaves nonEmpty, "octaves must not be empty")
-    new Octaves3(persistence, octaves toList)
+    require(octaves.nonEmpty, "octaves must not be empty")
+    new Octaves3(persistence, octaves.toList)
   }
 
   /** Creates a new four-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise4*): Noise4 = {
-    require(octaves nonEmpty, "octaves must not be empty")
-    new Octaves4(persistence, octaves toList)
+    require(octaves.nonEmpty, "octaves must not be empty")
+    new Octaves4(persistence, octaves.toList)
   }
 
 }
@@ -60,11 +60,11 @@ private final class Octaves2(persistence: Float, octaves: List[Noise2]) extends 
     var total = 0f
     var deniminator = 0f
     for (octave <- octaves) {
-      deniminator += amplitude;
-      total += amplitude * octave(x, y);
-      amplitude *= persistence;
+      deniminator += amplitude
+      total += amplitude * octave(x, y)
+      amplitude *= persistence
     }
-    Numbers.clamp(total / deniminator, -1f, 1f);
+    (total / deniminator).clamp(-1f, 1f)
   }
 
 }
@@ -83,11 +83,11 @@ private final class Octaves3(persistence: Float, octaves: List[Noise3]) extends 
     var total = 0f
     var deniminator = 0f
     for (octave <- octaves) {
-      deniminator += amplitude;
-      total += amplitude * octave(x, y, z);
-      amplitude *= persistence;
+      deniminator += amplitude
+      total += amplitude * octave(x, y, z)
+      amplitude *= persistence
     }
-    Numbers.clamp(total / deniminator, -1f, 1f);
+    (total / deniminator).clamp(-1f, 1f)
   }
 
 }
@@ -106,11 +106,11 @@ private final class Octaves4(persistence: Float, octaves: List[Noise4]) extends 
     var total = 0f
     var deniminator = 0f
     for (octave <- octaves) {
-      deniminator += amplitude;
-      total += amplitude * octave(x, y, z, w);
-      amplitude *= persistence;
+      deniminator += amplitude
+      total += amplitude * octave(x, y, z, w)
+      amplitude *= persistence
     }
-    Numbers.clamp(total / deniminator, -1f, 1f);
+    (total / deniminator).clamp(-1f, 1f)
   }
 
 }
