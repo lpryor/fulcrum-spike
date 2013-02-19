@@ -1,7 +1,7 @@
 /*
  * Random.scala
  * 
- * Copyright (c) 2013 Lonnie Pryor III
+ * Copyright (c) 2013 Lonnie Pryor III and others.
  * 
  * Portions of this file are licensed under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in 

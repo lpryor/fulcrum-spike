@@ -29,19 +29,19 @@ object Octaves {
   /** Creates a new two-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise2*): Noise2 = {
     require(octaves.nonEmpty, "octaves must not be empty")
-    new Octaves2(persistence, octaves.toList)
+    new Octaves2(persistence, octaves.toArray)
   }
 
   /** Creates a new three-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise3*): Noise3 = {
     require(octaves.nonEmpty, "octaves must not be empty")
-    new Octaves3(persistence, octaves.toList)
+    new Octaves3(persistence, octaves.toArray)
   }
 
   /** Creates a new four-dimensional multi-octave noise generator. */
   def apply(persistence: Float, octaves: Noise4*): Noise4 = {
     require(octaves.nonEmpty, "octaves must not be empty")
-    new Octaves4(persistence, octaves.toList)
+    new Octaves4(persistence, octaves.toArray)
   }
 
 }
@@ -52,17 +52,19 @@ object Octaves {
  *
  * @author Lonnie Pryor III (lonnie@pryor.us.com)
  */
-private final class Octaves2(persistence: Float, octaves: List[Noise2]) extends Noise2 {
+private final class Octaves2(persistence: Float, octaves: Array[Noise2]) extends Noise2 {
 
   /* @see Noise2#apply(float, float) */
   override def apply(x: Float, y: Float) = {
     var amplitude = 1f
     var total = 0f
     var deniminator = 0f
-    for (octave <- octaves) {
+    var i = 0
+    while(i < octaves.length) {
       deniminator += amplitude
-      total += amplitude * octave(x, y)
+      total += amplitude * octaves(i)(x, y)
       amplitude *= persistence
+      i += 1
     }
     (total / deniminator).clamp(-1f, 1f)
   }
@@ -75,17 +77,19 @@ private final class Octaves2(persistence: Float, octaves: List[Noise2]) extends 
  *
  * @author Lonnie Pryor III (lonnie@pryor.us.com)
  */
-private final class Octaves3(persistence: Float, octaves: List[Noise3]) extends Noise3 {
+private final class Octaves3(persistence: Float, octaves: Array[Noise3]) extends Noise3 {
 
   /* @see Noise3#apply(float, float, float) */
   override def apply(x: Float, y: Float, z: Float) = {
     var amplitude = 1f
     var total = 0f
     var deniminator = 0f
-    for (octave <- octaves) {
+    var i = 0
+    while(i < octaves.length) {
       deniminator += amplitude
-      total += amplitude * octave(x, y, z)
+      total += amplitude * octaves(i)(x, y, z)
       amplitude *= persistence
+      i += 1
     }
     (total / deniminator).clamp(-1f, 1f)
   }
@@ -98,17 +102,19 @@ private final class Octaves3(persistence: Float, octaves: List[Noise3]) extends 
  *
  * @author Lonnie Pryor III (lonnie@pryor.us.com)
  */
-private final class Octaves4(persistence: Float, octaves: List[Noise4]) extends Noise4 {
+private final class Octaves4(persistence: Float, octaves: Array[Noise4]) extends Noise4 {
 
   /* @see Noise4#apply(float, float, float, float) */
   override def apply(x: Float, y: Float, z: Float, w: Float) = {
     var amplitude = 1f
     var total = 0f
     var deniminator = 0f
-    for (octave <- octaves) {
+    var i = 0
+    while(i < octaves.length) {
       deniminator += amplitude
-      total += amplitude * octave(x, y, z, w)
+      total += amplitude * octaves(i)(x, y, z, w)
       amplitude *= persistence
+      i += 1
     }
     (total / deniminator).clamp(-1f, 1f)
   }
