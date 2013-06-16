@@ -36,11 +36,14 @@ object Settings {
   /** Scala reflection library. */
   val reflect = scalaVersion("org.scala-lang" % "scala-reflect" % _)
   
-  /** Scalatest (primary testing framework). */
-  val scalatest = "org.scalatest" % "scalatest_2.10" % "1.9.1" % "test"
+  /** ScalaTest (primary testing framework). */
+  val scalaTest = "org.scalatest" %% "scalatest" % "1.9.1" % "test" 
+  
+  /** ScalaMock (mocking framework). */
+  val scalaMock = "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test"
   
   /** JUnit (for easy IDE integration). */
-  val junit = "junit" % "junit" % "4.11" % "test"
+  val jUnit = "junit" % "junit" % "4.11" % "test"
 
 }
 
@@ -54,7 +57,7 @@ object Fulcrum extends Build {
     id = "fulcrum",
     base = file("."),
     settings = Settings.defaults
-  ) aggregate (code, code_tests)
+  ) aggregate (code, code_tests, util, util_tests)
 
   /** The code project. */
   lazy val code: Project = Project(
@@ -62,7 +65,7 @@ object Fulcrum extends Build {
     base = file("code"),
     settings = Settings.defaults ++ Seq(
       libraryDependencies <+= Settings.reflect,
-      libraryDependencies += Settings.scalatest
+      libraryDependencies += Settings.scalaTest
     )
   )
 
@@ -71,9 +74,28 @@ object Fulcrum extends Build {
     id = "fulcrum-code-tests",
     base = file("code-tests"),
     settings = Settings.defaults ++ Seq(
-      libraryDependencies += Settings.junit,
-      libraryDependencies += Settings.scalatest
+      libraryDependencies += Settings.jUnit,
+      libraryDependencies += Settings.scalaTest
     )
   ) dependsOn (code % "test->test")
+
+  /** The utilities project. */
+  lazy val util: Project = Project(
+    id = "fulcrum-util",
+    base = file("util"),
+    settings = Settings.defaults ++ Seq(
+      libraryDependencies <+= Settings.reflect
+    )
+  ) dependsOn (code)
+
+  /** The utilities tests project. */
+  lazy val util_tests: Project = Project(
+    id = "fulcrum-util-tests",
+    base = file("util-tests"),
+    settings = Settings.defaults ++ Seq(
+      libraryDependencies += Settings.jUnit,
+      libraryDependencies += Settings.scalaTest
+    )
+  ) dependsOn (util % "test->test")
 
 }
